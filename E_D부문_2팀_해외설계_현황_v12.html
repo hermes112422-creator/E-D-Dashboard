@@ -1,0 +1,2621 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>E&D부문 2팀 해외설계 현황 v11</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Pretendard:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" media="print" onload="this.media='all'" onerror="this.remove()">
+<script>
+(function(){var s=document.createElement('script');s.src='https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js';s.onerror=function(){window._xlsxOffline=true;};document.head.appendChild(s);})();
+(function(){var s=document.createElement('script');s.src='https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js';s.onerror=function(){window._chartOffline=true;};document.head.appendChild(s);})();
+</script>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#f0f4f8;--card:#ffffff;--card2:#f7f9fc;--border:#e2e8f0;--border2:#cbd5e1;
+  --accent:#1e40af;--accent2:#3b82f6;--green:#059669;--orange:#ea580c;--yellow:#d97706;
+  --purple:#7c3aed;--pink:#db2777;--red:#dc2626;--teal:#0d9488;--cyan:#0891b2;
+  --text:#0f172a;--dim:#64748b;--muted:#cbd5e1;--light:#f1f5f9;
+  --shadow:0 1px 3px rgba(0,0,0,.07),0 4px 12px rgba(0,0,0,.04);
+  --shadow-md:0 4px 20px rgba(0,0,0,.1),0 1px 4px rgba(0,0,0,.06);
+}
+html,body{height:100%;font-family:'Pretendard',-apple-system,'Apple SD Gothic Neo','Malgun Gothic','맑은 고딕',sans-serif;background:var(--bg);color:var(--text);font-size:13px;overflow:hidden;-webkit-text-size-adjust:100%}
+::-webkit-scrollbar{width:4px;height:4px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:var(--muted);border-radius:4px}
+
+/* ═══ APP LAYOUT ═══ */
+#app{height:100vh;height:100dvh;display:flex;flex-direction:column;overflow:hidden}
+
+/* ═══ HEADER ═══ */
+.hdr{display:flex;align-items:center;justify-content:space-between;
+  padding:0 18px;height:54px;background:var(--card);border-bottom:1px solid var(--border);
+  flex-shrink:0;gap:12px}
+.hdr-l{display:flex;align-items:center;gap:10px}
+.hdr-logo{width:32px;height:32px;flex-shrink:0}
+.hdr-info{display:flex;flex-direction:column}
+.hdr-t1{font-size:14px;font-weight:700;color:var(--text);cursor:pointer;transition:color .2s}
+.hdr-t1:hover{color:var(--accent)}
+.hdr-t2{font-size:10px;color:var(--dim)}
+.hdr-c{display:flex;align-items:center;gap:6px;flex:1;justify-content:center}
+.pill{font-family:'JetBrains Mono',monospace;font-size:10px;border-radius:20px;padding:3px 10px;display:flex;align-items:center;gap:4px;white-space:nowrap}
+.pill-date{background:var(--light);border:1px solid var(--border);color:var(--dim)}
+.pill-live{background:#ecfdf5;border:1px solid #6ee7b7;color:#059669;font-weight:600}
+.live-dot{width:5px;height:5px;border-radius:50%;background:#059669;animation:pulse 1.5s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
+.hdr-r{display:flex;align-items:center;gap:6px}
+.hdr-btn{display:flex;align-items:center;gap:5px;padding:5px 12px;border-radius:8px;cursor:pointer;font-size:11px;font-family:'JetBrains Mono',monospace;font-weight:600;transition:all .2s;white-space:nowrap;border:1px solid;min-height:36px}
+.btn-up{background:#eff6ff;border-color:#93c5fd;color:#1d4ed8}
+.btn-up:hover{background:#dbeafe}
+.btn-cum{background:#f5f3ff;border-color:#c4b5fd;color:#7c3aed}
+.btn-cum:hover{background:#ede9fe}
+.btn-xl{background:#f0fdf4;border-color:#86efac;color:#15803d}
+.btn-xl:hover{background:#dcfce7}
+
+/* ═══ MAIN TAB BAR ═══ */
+.main-tabs{display:flex;align-items:center;padding:0 18px;background:var(--card);
+  border-bottom:2px solid var(--border);flex-shrink:0;gap:2px}
+.main-tab{padding:10px 20px;font-size:12px;font-weight:600;color:var(--dim);cursor:pointer;min-height:44px;
+  border-bottom:2px solid transparent;margin-bottom:-2px;transition:all .2s;white-space:nowrap;
+  display:flex;align-items:center;gap:6px}
+.main-tab:hover{color:var(--text)}
+.main-tab.active{color:var(--accent);border-bottom-color:var(--accent)}
+.tab-badge{background:var(--accent);color:#fff;font-size:9px;padding:1px 5px;border-radius:8px;font-family:'JetBrains Mono',monospace}
+.tab-badge.g{background:var(--green)}
+.tab-badge.o{background:var(--orange)}
+
+/* ═══ TAB CONTENT ═══ */
+.tab-content{display:none;flex:1;overflow:hidden;min-height:0}
+.tab-content.active{display:flex;flex-direction:column}
+
+/* ═══ TAB 1: 현장현황 ═══ */
+.t1-body{flex:1;overflow-y:auto;padding:14px 18px;min-height:0;-webkit-overflow-scrolling:touch}
+
+/* 상단 요약 스트립 */
+.t1-summary{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:14px;flex-shrink:0}
+.t1-sum-card{border-radius:12px;padding:14px 16px;display:flex;align-items:center;gap:12px;
+  cursor:pointer;transition:all .2s;position:relative;overflow:hidden}
+.t1-sum-card::after{content:'';position:absolute;right:-10px;bottom:-10px;width:60px;height:60px;border-radius:50%;opacity:.08}
+.t1-sum-card:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(0,0,0,.12)}
+.t1-sum-ico{font-size:28px;flex-shrink:0;filter:drop-shadow(0 2px 4px rgba(0,0,0,.1))}
+.t1-sum-val{font-family:'JetBrains Mono',monospace;font-size:32px;font-weight:800;line-height:1;color:#fff}
+.t1-sum-lbl{font-size:11px;font-weight:600;color:rgba(255,255,255,.85);margin-top:2px}
+.t1-sum-sub{font-size:10px;color:rgba(255,255,255,.65);margin-top:1px;font-family:'JetBrains Mono',monospace}
+
+/* 섹션 레이아웃 */
+.t1-sections{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media(max-width:900px){.t1-sections{grid-template-columns:1fr}}
+
+.sec-panel{background:var(--card);border-radius:14px;overflow:hidden;box-shadow:var(--shadow);border:1px solid var(--border)}
+.sec-ph{display:flex;align-items:center;justify-content:space-between;padding:11px 16px;border-bottom:2px solid}
+.sec-title{display:flex;align-items:center;gap:8px;font-size:13px;font-weight:700;letter-spacing:-.2px}
+.sec-icon{font-size:15px}
+.sec-count{font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:700;
+  padding:3px 10px;border-radius:20px;letter-spacing:.5px}
+
+/* 현장 카드형 */
+.site-grid{display:flex;flex-direction:column;gap:0}
+.site-row{display:grid;grid-template-columns:44px 1fr auto auto;gap:8px;
+  align-items:center;padding:9px 14px;min-height:48px;border-bottom:1px solid var(--light);
+  cursor:pointer;transition:all .15s;position:relative}
+.site-row:last-child{border-bottom:none}
+.site-row:hover{background:linear-gradient(90deg,var(--light) 0%,transparent 100%)}
+.site-row:hover .sr-name{color:var(--accent)}
+.site-row::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;opacity:0;transition:opacity .15s;border-radius:0 2px 2px 0}
+.site-row:hover::before{opacity:1}
+.sr-left{display:flex;flex-direction:column;gap:3px;min-width:0}
+.sr-name{font-size:12px;font-weight:600;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;line-height:1.3}
+.sr-meta{display:flex;align-items:center;gap:5px}
+.sr-right{display:flex;flex-direction:column;align-items:flex-end;gap:3px;flex-shrink:0}
+.sr-area{font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:600;color:var(--text)}
+.sr-wt{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--dim)}
+
+/* 소계 */
+.subtotal-row{display:flex;align-items:center;justify-content:space-between;
+  padding:7px 14px;border-top:1px solid var(--border)}
+.subtotal-row span{font-size:10px;color:var(--dim);font-family:'JetBrains Mono',monospace;font-weight:500}
+.subtotal-row strong{color:var(--text);font-weight:700}
+
+/* 빈 상태 */
+.empty-state{padding:28px;text-align:center;color:var(--dim);font-size:11px}
+
+/* 태그 */
+.tag{display:inline-flex;align-items:center;justify-content:center;padding:2px 7px;border-radius:4px;font-size:10px;font-weight:600;font-family:'JetBrains Mono',monospace;white-space:nowrap}
+.t-plan{background:#dbeafe;color:#1d4ed8;border:1px solid #bfdbfe}
+.t-prod{background:#d1fae5;color:#065f46;border:1px solid #a7f3d0}
+.t-hold{background:#ffedd5;color:#9a3412;border:1px solid #fed7aa}
+.t-shell{background:#f3e8ff;color:#6b21a8;border:1px solid #e9d5ff}
+.t-wait{background:#fef3c7;color:#92400e;border:1px solid #fde68a}
+.t-chk{background:#fce7f3;color:#9d174d;border:1px solid #fbcfe8}
+.t-urg{background:#fee2e2;color:#991b1b;border:1px solid #fca5a5}
+.t-kkv{background:#eff6ff;color:#1d4ed8;border:1px solid #bfdbfe;font-size:9px}
+
+.ctag{display:inline-flex;align-items:center;gap:2px;padding:1px 6px;border-radius:4px;font-size:9px;font-weight:500;white-space:nowrap}
+.c-in{background:#fff7ed;color:#c2410c}.c-ke{background:#f0fdf4;color:#166534}
+.c-et{background:#fefce8;color:#854d0e}.c-br{background:#eff6ff;color:#1e40af}
+.c-sa{background:#fdf4ff;color:#7e22ce}.c-du{background:#f0fdfa;color:#134e4a}
+.c-ga{background:#fdf2f8;color:#9d174d}.c-ua{background:#fff8f1;color:#c2410c}
+.c-cy{background:#ecfeff;color:#164e63}.c-tt{background:#fef9c3;color:#713f12}
+
+/* 소계 행 */
+.subtotal-row{display:flex;align-items:center;justify-content:space-between;
+  padding:5px 12px;background:var(--light);border-top:1px solid var(--border)}
+.subtotal-row span{font-size:10px;color:var(--dim);font-family:'JetBrains Mono',monospace}
+.subtotal-row strong{color:var(--text)}
+
+/* 빈 상태 */
+.empty-state{padding:24px;text-align:center;color:var(--dim);font-size:11px}
+
+/* ═══ TAB 2: 설계진행상황 ═══ */
+.t2-body{flex:1;overflow-y:auto;padding:14px 18px;min-height:0;display:flex;flex-direction:column;gap:12px;-webkit-overflow-scrolling:touch}
+.t2-top{display:grid;grid-template-columns:1fr 1.4fr;gap:12px}
+.t2-bottom{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+
+/* KPI 카드 */
+.kpi-strip{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;flex-shrink:0}
+.kpi{background:var(--card);border:1px solid var(--border);border-radius:10px;
+  padding:11px 14px;box-shadow:var(--shadow);animation:fadeUp .4s ease both}
+@keyframes fadeUp{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+.kpi:nth-child(1){animation-delay:.05s}.kpi:nth-child(2){animation-delay:.1s}
+.kpi:nth-child(3){animation-delay:.15s}.kpi:nth-child(4){animation-delay:.2s}
+.kpi-top{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:4px}
+.kpi-lbl{font-size:10px;color:var(--dim);font-weight:500}
+.kpi-ico{font-size:16px;opacity:.7}
+.kpi-val{font-family:'JetBrains Mono',monospace;font-size:22px;font-weight:700;line-height:1;margin-bottom:2px}
+.kpi-sub{font-size:10px;color:var(--dim)}
+.kpi-bar{height:2px;background:var(--light);border-radius:2px;margin-top:6px;overflow:hidden}
+.kpi-bar-f{height:100%;border-radius:2px;transition:width .8s ease}
+.k1 .kpi-val{color:var(--accent2)}.k1 .kpi-bar-f{background:var(--accent2)}
+.k2 .kpi-val{color:var(--green)}.k2 .kpi-bar-f{background:var(--green)}
+.k3 .kpi-val{color:var(--orange)}.k3 .kpi-bar-f{background:var(--orange)}
+.k4 .kpi-val{color:var(--purple)}.k4 .kpi-bar-f{background:var(--purple)}
+
+/* 패널 공통 */
+.panel{background:var(--card);border:1px solid var(--border);border-radius:12px;overflow:hidden;display:flex;flex-direction:column;box-shadow:var(--shadow)}
+.ph{display:flex;align-items:center;justify-content:space-between;padding:9px 14px;border-bottom:1px solid var(--border);background:var(--card2);flex-shrink:0}
+.pt{display:flex;align-items:center;gap:7px;font-size:12px;font-weight:700}
+.dot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
+.pb{flex:1;padding:10px 14px;overflow-y:auto;min-height:0}
+
+/* 팀원 카드 */
+.member-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;padding:10px 12px}
+.mc{background:var(--light);border:1px solid var(--border);border-radius:8px;
+  padding:10px 12px;cursor:pointer;transition:all .2s}
+.mc:hover{border-color:var(--accent2);box-shadow:0 2px 8px rgba(37,99,235,.1)}
+.mc-top{display:flex;align-items:center;gap:8px;margin-bottom:6px}
+.mc-av{width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:#fff;flex-shrink:0}
+.mc-name{font-size:12px;font-weight:600}
+.mc-role{font-size:10px;color:var(--dim)}
+.mc-status{font-size:10px;font-weight:600}
+.mc-projs{display:flex;flex-wrap:wrap;gap:3px;margin-top:5px}
+.mc-proj-tag{font-size:9px;background:var(--card);border:1px solid var(--border);padding:1px 6px;border-radius:4px;color:var(--dim);white-space:nowrap;overflow:hidden;max-width:110px;text-overflow:ellipsis}
+
+/* 주요현황 테이블 */
+.status-tbl{width:100%;border-collapse:collapse}
+.status-tbl th{font-size:10px;color:var(--dim);text-transform:uppercase;letter-spacing:.5px;
+  padding:5px 8px;text-align:left;border-bottom:2px solid var(--border);background:var(--light);font-weight:600}
+.status-tbl td{padding:6px 8px;border-bottom:1px solid var(--light);font-size:11px;vertical-align:middle}
+.status-tbl tr:last-child td{border-bottom:none}
+.status-tbl tr:hover td{background:var(--light)}
+
+/* 수출 인원 */
+.export-list{display:flex;flex-direction:column;gap:0}
+.exp-row{display:grid;grid-template-columns:90px 1fr 50px 60px;gap:6px;align-items:center;
+  padding:6px 12px;border-bottom:1px solid var(--light)}
+.exp-row:last-child{border-bottom:none}
+.exp-row:hover{background:var(--light)}
+.exp-country{font-size:11px;font-weight:600}
+.exp-bar-wrap{background:var(--light);border-radius:3px;height:4px;overflow:hidden}
+.exp-bar-fill{height:100%;border-radius:3px;transition:width 1s ease}
+.exp-cnt{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--dim);text-align:right}
+.exp-wt{font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:600;text-align:right}
+
+/* ═══ TAB 3: 차트 ═══ */
+.t3-body{flex:1;overflow-y:auto;padding:14px 18px;min-height:0;display:flex;flex-direction:column;gap:12px;-webkit-overflow-scrolling:touch}
+.t3-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;flex:1;min-height:0}
+.chart-panel{background:var(--card);border:1px solid var(--border);border-radius:12px;overflow:hidden;display:flex;flex-direction:column;box-shadow:var(--shadow);min-height:280px}
+.chart-body{flex:1;padding:10px 14px;min-height:0;position:relative}
+.chart-body canvas{width:100%!important;height:100%!important}
+
+/* ═══ SLIDE PANELS (L2, L3, Member) ═══ */
+.slide{position:fixed;inset:0;background:var(--bg);z-index:200;
+  display:flex;flex-direction:column;overflow:hidden;
+  transform:translateX(100%);transition:transform .3s cubic-bezier(.4,0,.2,1)}
+.slide.open{transform:translateX(0)}
+.slide-hdr{display:flex;align-items:center;gap:14px;padding:0 22px;height:50px;
+  background:var(--card);border-bottom:1px solid var(--border);flex-shrink:0}
+.back-btn{display:flex;align-items:center;gap:6px;background:var(--light);border:1px solid var(--border);
+  padding:8px 14px;border-radius:7px;cursor:pointer;font-size:11px;font-weight:500;
+  transition:all .2s;font-family:inherit;white-space:nowrap;min-height:40px}
+.back-btn:hover{background:var(--accent);border-color:var(--accent);color:#fff}
+.slide-title{font-size:14px;font-weight:700}
+.slide-sub{font-size:11px;color:var(--dim)}
+.slide-body{flex:1;overflow-y:auto;padding:18px 22px;min-height:0;-webkit-overflow-scrolling:touch}
+
+/* L2 proj grid */
+.proj-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.proj-card{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:13px 15px;
+  cursor:pointer;transition:all .2s;position:relative;overflow:hidden;box-shadow:var(--shadow)}
+.proj-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px}
+.proj-card.s-plan::before{background:var(--accent2)}
+.proj-card.s-prod::before{background:var(--green)}
+.proj-card:hover{border-color:var(--accent2);transform:translateY(-2px);box-shadow:var(--shadow-md)}
+.pc-name{font-size:12px;font-weight:600;margin:5px 0 3px}
+.pc-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:4px}
+.pc-meta{display:flex;gap:5px;align-items:center;margin-top:6px;flex-wrap:wrap}
+.pc-area{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--dim)}
+.pc-arrow{position:absolute;bottom:9px;right:11px;color:var(--muted);font-size:12px}
+.proj-card:hover .pc-arrow{color:var(--accent2)}
+.summary-strip{display:flex;gap:8px;margin-bottom:14px}
+.ss-item{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:9px 12px;flex:1;display:flex;align-items:center;gap:10px;box-shadow:var(--shadow)}
+.ss-val{font-family:'JetBrains Mono',monospace;font-size:18px;font-weight:700}
+.ss-lbl{font-size:10px;color:var(--dim);margin-top:1px}
+.sec-divider{font-size:11px;color:var(--dim);text-transform:uppercase;letter-spacing:1px;margin:0 0 9px;display:flex;align-items:center;gap:7px;font-weight:600}
+
+/* L3 */
+.d-kpi-row{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:14px}
+.d-kpi{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:10px 12px;text-align:center;box-shadow:var(--shadow)}
+.d-kv{font-family:'JetBrains Mono',monospace;font-size:16px;font-weight:700}
+.d-kl{font-size:10px;color:var(--dim);margin-top:2px}
+.d-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px}
+.d-full{margin-bottom:10px}
+.d-panel{background:var(--card);border:1px solid var(--border);border-radius:8px;overflow:hidden;box-shadow:var(--shadow)}
+.d-ph{font-size:11px;font-weight:600;padding:8px 12px;border-bottom:1px solid var(--border);background:var(--card2)}
+.d-pb{padding:10px 12px}
+.info-tbl{width:100%;border-collapse:collapse}
+.ik{font-size:10px;color:var(--dim);padding:4px 5px;font-weight:500;width:60px}
+.iv{font-size:11px;padding:4px 5px;color:var(--text);font-weight:500}
+.info-tbl tr:nth-child(even) td{background:var(--light)}
+.designer-card{display:flex;gap:8px;align-items:flex-start;padding:7px;border-radius:7px;margin-bottom:5px;background:var(--light)}
+.av{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:#fff;flex-shrink:0}
+.av-name{font-size:11px;font-weight:600}
+.av-task{font-size:10px;color:var(--dim);margin-top:1px}
+.tl{display:flex;flex-direction:column;gap:8px}
+.tl-item{display:flex;gap:12px;padding:6px;border-radius:7px}
+.tl-item:hover{background:var(--light)}
+.tl-dot{width:16px;height:16px;border-radius:50%;flex-shrink:0;margin-top:1px;display:flex;align-items:center;justify-content:center;font-size:7px;font-weight:700;color:#fff}
+.tl-t{font-size:11px;font-weight:600}
+.tl-m{font-size:10px;color:var(--dim);margin:1px 0}
+.tl-n{font-size:10px;color:var(--dim);line-height:1.5;padding:4px 7px;background:var(--light);border-radius:4px;margin-top:3px;border:1px solid var(--border)}
+
+/* Member Slide */
+.member-av-big{width:44px;height:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:700;color:#fff;flex-shrink:0}
+.m-stat{background:var(--card);border:1px solid var(--border);border-radius:7px;padding:7px 10px;flex:1;min-width:70px;text-align:center}
+.m-stat-v{font-family:'JetBrains Mono',monospace;font-size:18px;font-weight:700}
+.m-stat-l{font-size:10px;color:var(--dim)}
+.member-proj-card{border:1px solid var(--border);border-radius:8px;padding:12px 14px;margin-bottom:8px;border-left:3px solid}
+.mpc-name{font-size:12px;font-weight:600;margin:5px 0 3px}
+.mpc-meta{display:flex;gap:10px;font-size:10px;color:var(--dim);margin-bottom:8px}
+
+/* Cumulative Slide */
+.cum-tabs{display:flex;gap:2px;padding:0 22px;background:var(--card);border-bottom:1px solid var(--border);flex-shrink:0}
+.ctab{padding:9px 16px;font-size:11px;font-weight:600;color:var(--dim);cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-1px;transition:all .2s;white-space:nowrap;display:flex;align-items:center;gap:5px}
+.ctab:hover{color:var(--text)}
+.ctab.active{color:var(--accent);border-bottom-color:var(--accent)}
+.ctab-badge{background:var(--accent);color:#fff;font-size:9px;padding:1px 5px;border-radius:8px;font-family:'JetBrains Mono',monospace}
+.cum-body{flex:1;overflow-y:auto;padding:18px 22px;min-height:0;-webkit-overflow-scrolling:touch}
+.history-entry{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:14px 16px;margin-bottom:10px;display:flex;flex-wrap:wrap;gap:8px;align-items:flex-start}
+.he-date{font-size:12px;font-weight:600}
+.he-stat{font-size:11px;color:var(--dim);white-space:nowrap}
+.change-tag{font-size:10px;padding:2px 7px;border-radius:5px;font-family:'JetBrains Mono',monospace;font-weight:600}
+.ct-add{background:#d1fae5;color:#065f46}.ct-del{background:#fee2e2;color:#991b1b}
+.ct-mod{background:#dbeafe;color:#1d4ed8}.ct-inf{background:#f1f5f9;color:#475569}
+
+/* Upload modal */
+.modal-overlay{position:fixed;inset:0;background:rgba(15,23,42,.5);z-index:300;display:none;align-items:center;justify-content:center;backdrop-filter:blur(3px)}
+.modal-overlay.open{display:flex}
+.modal-box{background:var(--card);border-radius:14px;width:640px;max-width:95vw;max-height:85vh;display:flex;flex-direction:column;box-shadow:0 20px 60px rgba(0,0,0,.2)}
+.modal-hdr{display:flex;align-items:flex-start;justify-content:space-between;padding:16px 20px;border-bottom:1px solid var(--border)}
+.modal-title{font-size:14px;font-weight:700}
+.modal-body{flex:1;overflow-y:auto;padding:16px 20px}
+.modal-footer{display:flex;gap:8px;justify-content:flex-end;padding:12px 20px;border-top:1px solid var(--border)}
+.btn-cancel{background:var(--light);border:1px solid var(--border);color:var(--text);padding:6px 14px;border-radius:7px;cursor:pointer;font-size:12px;font-family:inherit;font-weight:500}
+.btn-primary{background:var(--accent);border:1px solid var(--accent);color:#fff;padding:6px 14px;border-radius:7px;cursor:pointer;font-size:12px;font-family:inherit;font-weight:600;transition:all .2s}
+.btn-primary:hover{background:#1e3a8a}
+
+/* Complete modal */
+.cf-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.cf-full{grid-column:1/-1}
+.cf-label{display:block;font-size:11px;color:var(--dim);font-weight:500;margin-bottom:4px}
+.cf-input,.cf-select,.cf-textarea{width:100%;border:1px solid var(--border);border-radius:6px;padding:6px 10px;font-size:12px;font-family:inherit;background:var(--card);color:var(--text);outline:none;transition:border-color .2s}
+.cf-input:focus,.cf-select:focus,.cf-textarea:focus{border-color:var(--accent2)}
+.cf-textarea{resize:vertical;min-height:60px}
+
+/* Upload drop zone */
+.drop-zone{border:2px dashed var(--border);border-radius:10px;padding:30px;text-align:center;cursor:pointer;transition:all .2s;background:var(--light)}
+.drop-zone:hover,.drop-zone.drag{border-color:var(--accent2);background:#eff6ff}
+.drop-zone-icon{font-size:36px;margin-bottom:8px}
+.drop-zone-text{font-size:13px;font-weight:600;color:var(--text);margin-bottom:4px}
+.drop-zone-sub{font-size:11px;color:var(--dim)}
+.change-item{display:flex;align-items:center;gap:8px;padding:7px 10px;border-radius:7px;margin-bottom:5px;border:1px solid var(--border);background:var(--light);font-size:11px}
+
+/* Toast */
+#_toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:rgba(15,23,42,.9);color:#fff;padding:7px 16px;border-radius:16px;font-size:11px;font-family:'JetBrains Mono',monospace;z-index:9999;transition:opacity .3s;pointer-events:none;white-space:nowrap;opacity:0}
+
+/* 완료현장 카드 */
+.comp-card{background:var(--card);border:1px solid var(--border);border-radius:9px;padding:12px 14px;margin-bottom:8px;border-left:3px solid var(--green);box-shadow:var(--shadow)}
+.comp-card-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:6px}
+.comp-meta{font-size:10px;color:var(--dim);line-height:1.7}
+
+/* 팀원 업무 편집 모달 */
+#member-edit-modal .modal-box{max-width:560px}
+.me-field{margin-bottom:12px}
+.me-label{font-size:11px;color:var(--dim);font-weight:600;margin-bottom:4px;display:block}
+.me-input{width:100%;border:1px solid var(--border);border-radius:7px;padding:7px 11px;font-size:12px;font-family:inherit;background:var(--card);color:var(--text);outline:none;transition:border-color .2s}
+.me-input:focus{border-color:var(--accent2)}
+.me-textarea{resize:vertical;min-height:80px}
+.me-status-row{display:flex;gap:6px;flex-wrap:wrap}
+.me-status-btn{padding:4px 12px;border-radius:20px;border:1px solid var(--border);font-size:11px;font-weight:600;cursor:pointer;transition:all .2s;background:var(--light)}
+.me-status-btn.active{border-color:var(--accent2);background:var(--accent2);color:#fff}
+.mc-edit-btn{position:absolute;top:6px;right:6px;background:var(--light);border:1px solid var(--border);border-radius:5px;padding:2px 7px;font-size:9px;color:var(--dim);cursor:pointer;transition:all .2s;display:none}
+.mc:hover .mc-edit-btn{display:block}
+.mc-edit-btn:hover{background:var(--accent2);color:#fff;border-color:var(--accent2)}
+.mc{position:relative}
+
+/* ═══════════════════════════════════════════
+   MOBILE RESPONSIVE — 768px 이하
+═══════════════════════════════════════════ */
+@media(max-width:768px){
+
+  /* 기본 터치 최적화 */
+  html,body{-webkit-tap-highlight-color:transparent;touch-action:manipulation}
+  #app{height:100dvh} /* dynamic viewport height for mobile browsers */
+
+  /* 헤더 */
+  .hdr{padding:0 12px;height:48px;gap:8px}
+  .hdr-logo{width:36px;height:36px}
+  .hdr-t1{font-size:12px;line-height:1.2}
+  .hdr-c{display:none} /* 날짜/LIVE 숨김 */
+  .hdr-r{gap:4px}
+  .hdr-btn{padding:5px 8px;font-size:10px;gap:2px}
+  .hdr-btn span{font-size:9px}
+
+  /* 탭바 */
+  .main-tabs{padding:0;overflow-x:auto;-webkit-overflow-scrolling:touch}
+  .main-tab{padding:8px 10px;font-size:10px;flex-shrink:0;gap:3px}
+  .main-tab span:not(.tab-badge){font-size:10px}
+
+  /* 탭1 — 현장현황 */
+  .t1-body{padding:10px 12px}
+  .t1-summary{grid-template-columns:repeat(2,1fr);gap:8px;margin-bottom:10px}
+  .t1-sum-card{padding:11px 12px;gap:8px}
+  .t1-sum-ico{font-size:22px}
+  .t1-sum-val{font-size:24px}
+  .t1-sum-lbl{font-size:10px}
+  .t1-sum-sub{font-size:9px}
+  .t1-sections{grid-template-columns:1fr;gap:10px}
+
+  /* 현장 행 */
+  .site-row{grid-template-columns:38px 1fr auto;gap:6px;padding:8px 10px}
+  .site-row > div:last-child{display:none} /* 클라이언트 뱃지 숨김 */
+  .sr-name{font-size:11px}
+  .sr-area{font-size:10px}
+  .sr-wt{font-size:9px}
+  .sec-ph{padding:9px 12px}
+  .sec-title{font-size:12px}
+
+  /* 탭2 — 설계진행상황 */
+  .t2-body{padding:10px 12px;gap:10px}
+  .kpi-strip{grid-template-columns:repeat(2,1fr);gap:8px}
+  .kpi-val{font-size:18px}
+  .t2-top{grid-template-columns:1fr}
+  .t2-bottom{grid-template-columns:1fr}
+  .member-grid{grid-template-columns:1fr 1fr;gap:6px;padding:8px}
+  .mc-name{font-size:11px}
+  .mc-role{font-size:9px}
+  .mc-proj-tag{max-width:80px;font-size:8px}
+
+  /* 주요현황 테이블 — 모바일 최소화 */
+  .status-tbl th:nth-child(4),
+  .status-tbl td:nth-child(4),
+  .status-tbl th:nth-child(5),
+  .status-tbl td:nth-child(5){display:none}
+  .status-tbl th,.status-tbl td{padding:5px 6px;font-size:10px}
+
+  /* 탭3 — 차트 */
+  .t3-body{padding:10px 12px;gap:10px}
+  .t3-row{grid-template-columns:1fr;gap:10px}
+  .chart-panel{min-height:220px}
+
+  /* 슬라이드 패널 */
+  .slide-hdr{padding:0 14px;height:48px;gap:10px}
+  .slide-title{font-size:13px}
+  .slide-body{padding:14px 14px}
+  .back-btn{padding:5px 10px;font-size:11px}
+
+  /* L2 프로젝트 그리드 */
+  .proj-grid{grid-template-columns:1fr}
+  .summary-strip{flex-wrap:wrap;gap:6px}
+  .ss-item{min-width:calc(50% - 3px);flex:none}
+  .ss-val{font-size:16px}
+
+  /* L3 상세 */
+  .d-kpi-row{grid-template-columns:repeat(2,1fr)}
+  .d-grid{grid-template-columns:1fr}
+
+  /* 팀원 상세 슬라이드 */
+  .member-av-big{width:38px;height:38px;font-size:14px}
+
+  /* 누적관리 슬라이드 */
+  .cum-tabs{padding:0 12px;overflow-x:auto;-webkit-overflow-scrolling:touch}
+  .ctab{padding:8px 12px;font-size:10px;flex-shrink:0}
+  .cum-body{padding:14px 14px}
+
+  /* 모달 */
+  .modal-box{width:100%!important;max-width:100%!important;max-height:92dvh;
+    border-radius:18px 18px 0 0;position:fixed;bottom:0;left:0;right:0}
+  .modal-overlay{align-items:flex-end}
+  .modal-body{padding:14px 16px}
+  .modal-footer{padding:10px 16px}
+  .cf-grid{grid-template-columns:1fr}
+  .cf-full{grid-column:1}
+
+  /* 팀원 편집 모달 */
+  #member-edit-modal .modal-box{max-width:100%!important}
+
+  /* 편집 버튼 — 모바일에서 항상 표시 */
+  .mc-edit-btn{display:block!important}
+
+  /* 토스트 */
+  #_toast{bottom:80px;font-size:12px;padding:8px 18px}
+}
+
+/* ═══ 태블릿 (769px ~ 1024px) ═══ */
+@media(min-width:769px) and (max-width:1024px){
+  .t1-summary{grid-template-columns:repeat(4,1fr)}
+  .t1-sections{grid-template-columns:1fr 1fr}
+  .t2-top{grid-template-columns:1fr 1fr}
+  .t2-bottom{grid-template-columns:1fr 1fr}
+  .t3-row{grid-template-columns:1fr 1fr}
+  .proj-grid{grid-template-columns:repeat(2,1fr)}
+  .d-kpi-row{grid-template-columns:repeat(4,1fr)}
+  .hdr-c{display:none}
+}
+
+/* ═══ 소형 모바일 (max 390px) ═══ */
+@media(max-width:390px){
+  .t1-summary{grid-template-columns:repeat(2,1fr)}
+  .t1-sum-val{font-size:20px}
+  .hdr-t1{font-size:11px}
+  .main-tab{padding:9px 10px;font-size:10px}
+  .kpi-strip{grid-template-columns:repeat(2,1fr)}
+  .member-grid{grid-template-columns:1fr}
+}
+
+/* 구글시트 연동 버튼 */
+.btn-gs{background:linear-gradient(135deg,#1a73e8,#0d47a1);border-color:#1a73e8;color:#fff}
+.btn-gs:hover{background:linear-gradient(135deg,#1557b0,#0a3470)}
+.btn-gs.syncing{opacity:.7;pointer-events:none}
+.sync-indicator{display:inline-flex;align-items:center;gap:4px;font-size:10px;
+  color:#059669;font-family:'JetBrains Mono',monospace;padding:3px 9px;
+  background:#ecfdf5;border:1px solid #6ee7b7;border-radius:20px}
+.sync-dot{width:5px;height:5px;border-radius:50%;background:#059669;animation:pulse 1.5s infinite}
+.sync-error{color:var(--red);background:#fef2f2;border-color:#fca5a5}
+</style>
+</head>
+<body>
+<div id="app">
+
+<!-- ═══ HEADER ═══ -->
+<div class="hdr">
+  <div class="hdr-l">
+    <img src="data:image/png;base64,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" style="width:46px;height:46px;object-fit:cover;border-radius:0;background:transparent;display:block" alt="logo">
+    <div class="hdr-info">
+      <div class="hdr-t1" onclick="goHome()">알폼설계팀 해외파트 설계 현황</div>
+    </div>
+  </div>
+  <div class="hdr-c">
+    <div class="pill pill-date">📅 <span id="today-date"></span></div>
+    <div class="pill pill-live"><div class="live-dot"></div>LIVE</div>
+  </div>
+  <div class="hdr-r">
+    <span id="sync-status" style="display:none"></span>
+    <div class="hdr-btn btn-gs" onclick="syncGoogleSheet()" id="btn-gs"><span>🔄 시트 동기화</span></div>
+    <div class="hdr-btn btn-xl" onclick="openCompModal()"><span>✅ 완료등록</span></div>
+    <div class="hdr-btn btn-cum" onclick="openCumulative()" id="cum-btn"><span>📊 누적관리</span> <span class="tab-badge" id="cum-count-badge" style="display:none"></span></div>
+    <div class="hdr-btn btn-up" onclick="document.getElementById('xl-upload').click()"><span>⬆ 엑셀 업로드</span></div>
+    <input type="file" id="xl-upload" accept=".xlsx,.xls" style="display:none" onchange="handleUpload(this)">
+  </div>
+</div>
+
+<!-- ═══ MAIN TABS ═══ -->
+<div class="main-tabs">
+  <div class="main-tab active" onclick="switchTab(0)" id="mtab-0">
+    📋 <span>현장 현황</span>
+    <span class="tab-badge" id="tab0-badge">27</span>
+  </div>
+  <div class="main-tab" onclick="switchTab(1)" id="mtab-1">
+    👥 <span>설계 진행상황</span>
+  </div>
+  <div class="main-tab" onclick="switchTab(2)" id="mtab-2">
+    📈 <span>수출 &amp; 설계량</span>
+  </div>
+</div>
+
+<!-- ═══ TAB 0: 현장 현황 ═══ -->
+<div class="tab-content active" id="tab-0">
+  <div class="t1-body">
+
+    <!-- 상단 요약 카드 -->
+    <div class="t1-summary">
+      <div class="t1-sum-card" style="background:linear-gradient(135deg,#1d4ed8,#3b82f6)" onclick="switchTab(0)" title="플랜 현장 보기">
+        <div class="t1-sum-ico">📐</div>
+        <div>
+          <div class="t1-sum-val" id="sum-plan">2</div>
+          <div class="t1-sum-lbl">플랜 진행중</div>
+          <div class="t1-sum-sub" id="sum-plan-area">5,395 m²</div>
+        </div>
+      </div>
+      <div class="t1-sum-card" style="background:linear-gradient(135deg,#047857,#059669)" onclick="switchTab(0)" title="제작도 현장 보기">
+        <div class="t1-sum-ico">📋</div>
+        <div>
+          <div class="t1-sum-val" id="sum-prod">7</div>
+          <div class="t1-sum-lbl">제작도 진행중</div>
+          <div class="t1-sum-sub" id="sum-prod-area">33,180 m²</div>
+        </div>
+      </div>
+      <div class="t1-sum-card" style="background:linear-gradient(135deg,#c2410c,#ea580c)" onclick="switchTab(0)">
+        <div class="t1-sum-ico">⏸</div>
+        <div>
+          <div class="t1-sum-val" id="sum-hold">3</div>
+          <div class="t1-sum-lbl">설계 보류</div>
+          <div class="t1-sum-sub" id="sum-hold-area">2,563 m²</div>
+        </div>
+      </div>
+      <div class="t1-sum-card" style="background:linear-gradient(135deg,#6d28d9,#7c3aed)" onclick="switchTab(0)">
+        <div class="t1-sum-ico">🕐</div>
+        <div>
+          <div class="t1-sum-val" id="sum-wait">16</div>
+          <div class="t1-sum-lbl">설계 대기</div>
+          <div class="t1-sum-sub" id="sum-wait-area">99,978 m²</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="t1-sections">
+
+      <!-- 플랜 진행중 -->
+      <div class="sec-panel">
+        <div class="sec-ph" style="background:linear-gradient(90deg,#eff6ff,#f0f9ff);border-bottom-color:#bfdbfe">
+          <div class="sec-title" style="color:#1d4ed8">
+            <span class="sec-icon">📐</span>
+            플랜 진행중
+          </div>
+          <span class="sec-count" style="background:#1d4ed8;color:#fff" id="plan-count">2건</span>
+        </div>
+        <div class="site-grid" id="plan-grid" style="--hover-color:#1d4ed8"></div>
+        <div class="subtotal-row" id="plan-subtotal"></div>
+      </div>
+
+      <!-- 제작도 진행중 -->
+      <div class="sec-panel">
+        <div class="sec-ph" style="background:linear-gradient(90deg,#f0fdf4,#ecfdf5);border-bottom-color:#a7f3d0">
+          <div class="sec-title" style="color:#065f46">
+            <span class="sec-icon">📋</span>
+            제작도 진행중
+          </div>
+          <span class="sec-count" style="background:#059669;color:#fff" id="prod-count">7건</span>
+        </div>
+        <div class="site-grid" id="prod-grid"></div>
+        <div class="subtotal-row" id="prod-subtotal"></div>
+      </div>
+
+      <!-- 설계 보류 -->
+      <div class="sec-panel">
+        <div class="sec-ph" style="background:linear-gradient(90deg,#fff7ed,#fef3ea);border-bottom-color:#fed7aa">
+          <div class="sec-title" style="color:#9a3412">
+            <span class="sec-icon">⏸</span>
+            설계 보류
+          </div>
+          <span class="sec-count" style="background:#ea580c;color:#fff" id="hold-count">3건</span>
+        </div>
+        <div class="site-grid" id="hold-grid"></div>
+        <div class="subtotal-row" id="hold-subtotal"></div>
+      </div>
+
+      <!-- 설계 대기 (SHELL+예정) -->
+      <div class="sec-panel">
+        <div class="sec-ph" style="background:linear-gradient(90deg,#faf5ff,#f5f3ff);border-bottom-color:#e9d5ff">
+          <div class="sec-title" style="color:#6b21a8">
+            <span class="sec-icon">🕐</span>
+            설계 대기
+          </div>
+          <span class="sec-count" style="background:#7c3aed;color:#fff" id="wait-count">16건</span>
+        </div>
+        <div class="site-grid" id="wait-grid"></div>
+        <div class="subtotal-row" id="wait-subtotal"></div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- ═══ TAB 1: 설계 진행상황 ═══ -->
+<div class="tab-content" id="tab-1">
+  <div class="t2-body">
+
+    <!-- KPI 스트립 -->
+    <div class="kpi-strip">
+      <div class="kpi k1">
+        <div class="kpi-top"><div class="kpi-lbl">플랜 진행중</div><div class="kpi-ico">📐</div></div>
+        <div class="kpi-val" id="kpi-plan">2</div>
+        <div class="kpi-sub" id="kpi-plan-sub">5,395 m²</div>
+        <div class="kpi-bar"><div class="kpi-bar-f" id="kpi-plan-bar" style="width:20%"></div></div>
+      </div>
+      <div class="kpi k2">
+        <div class="kpi-top"><div class="kpi-lbl">제작도 진행중</div><div class="kpi-ico">📋</div></div>
+        <div class="kpi-val" id="kpi-prod">6</div>
+        <div class="kpi-sub" id="kpi-prod-sub">33,180 m²</div>
+        <div class="kpi-bar"><div class="kpi-bar-f" id="kpi-prod-bar" style="width:50%"></div></div>
+      </div>
+      <div class="kpi k3">
+        <div class="kpi-top"><div class="kpi-lbl">설계 보류</div><div class="kpi-ico">⏸</div></div>
+        <div class="kpi-val" id="kpi-hold">3</div>
+        <div class="kpi-sub" id="kpi-hold-sub">2,563 m²</div>
+        <div class="kpi-bar"><div class="kpi-bar-f" id="kpi-hold-bar" style="width:30%"></div></div>
+      </div>
+      <div class="kpi k4">
+        <div class="kpi-top"><div class="kpi-lbl">설계 대기</div><div class="kpi-ico">🕐</div></div>
+        <div class="kpi-val" id="kpi-wait">16</div>
+        <div class="kpi-sub" id="kpi-wait-sub">99,978 m²</div>
+        <div class="kpi-bar"><div class="kpi-bar-f" id="kpi-wait-bar" style="width:80%"></div></div>
+      </div>
+    </div>
+
+    <div class="t2-top">
+      <!-- 수출 진행 인원 -->
+      <div class="panel">
+        <div class="ph"><div class="pt"><div class="dot" style="background:#1e40af"></div>수출 진행 인원</div></div>
+        <div class="member-grid" id="member-grid"></div>
+      </div>
+
+      <!-- 주요 현황 -->
+      <div class="panel">
+        <div class="ph"><div class="pt"><div class="dot" style="background:#059669"></div>주요 현황 · 긴급/주의</div></div>
+        <div class="pb" style="padding:0">
+          <table class="status-tbl">
+            <thead><tr>
+              <th>현장</th><th>국가</th><th>상태</th><th>납기</th><th>비고</th>
+            </tr></thead>
+            <tbody id="status-tbl-body"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <div class="t2-bottom">
+      <!-- 설계 진행상황 (법인별) -->
+      <div class="panel">
+        <div class="ph"><div class="pt"><div class="dot" style="background:#7c3aed"></div>법인별 설계 진행 현황</div></div>
+        <div class="pb" style="padding:0">
+          <div class="export-list" id="corp-list"></div>
+        </div>
+      </div>
+
+      <!-- 수출 물량 국가별 요약 -->
+      <div class="panel">
+        <div class="ph"><div class="pt"><div class="dot" style="background:#ea580c"></div>수출 물량 국가별 (2026)</div></div>
+        <div class="pb" style="padding:0">
+          <div class="export-list" id="export-country-list"></div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ═══ TAB 2: 차트 ═══ -->
+<div class="tab-content" id="tab-2">
+  <div class="t3-body">
+    <div class="t3-row">
+      <!-- 수출물량 비교 -->
+      <div class="chart-panel">
+        <div class="ph"><div class="pt"><div class="dot" style="background:#ea580c"></div>수출 물량 비교 (ton · 2026)</div><span style="font-size:9px;color:var(--dim);font-family:'JetBrains Mono',monospace">Sheet1 기준</span></div>
+        <div class="chart-body"><canvas id="exportChart"></canvas></div>
+      </div>
+      <!-- 월별 설계량 -->
+      <div class="chart-panel">
+        <div class="ph"><div class="pt"><div class="dot" style="background:#3b82f6"></div>월별 납기 설계량 (건/ton)</div><span style="font-size:9px;color:var(--dim);font-family:'JetBrains Mono',monospace">납기 기준</span></div>
+        <div class="chart-body"><canvas id="monthlyChart"></canvas></div>
+      </div>
+    </div>
+    <div class="t3-row">
+      <!-- 상태별 현황 도넛 -->
+      <div class="chart-panel">
+        <div class="ph"><div class="pt"><div class="dot" style="background:#7c3aed"></div>설계 상태별 분포</div></div>
+        <div class="chart-body" style="display:flex;align-items:center;justify-content:center;gap:20px">
+          <canvas id="statusChart" style="max-width:160px;max-height:160px"></canvas>
+          <div id="status-legend" style="display:flex;flex-direction:column;gap:6px"></div>
+        </div>
+      </div>
+      <!-- 법인별 도넛 -->
+      <div class="chart-panel">
+        <div class="ph"><div class="pt"><div class="dot" style="background:#059669"></div>법인별 현장 분포</div></div>
+        <div class="chart-body" style="display:flex;align-items:center;justify-content:center;gap:20px">
+          <canvas id="corpChart" style="max-width:160px;max-height:160px"></canvas>
+          <div id="corp-legend" style="display:flex;flex-direction:column;gap:6px"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ LAYER 2: 진행중 현장 목록 ═══ -->
+<div class="slide" id="l2">
+  <div class="slide-hdr">
+    <button class="back-btn" onclick="closeL2()">← 대시보드</button>
+    <div><div class="slide-title">설계 진행중 현장</div><div class="slide-sub">카드 클릭 시 상세 정보</div></div>
+  </div>
+  <div class="slide-body">
+    <div class="summary-strip">
+      <div class="ss-item"><div class="ss-val" style="color:#3b82f6" id="l2-plan">2</div><div><div class="ss-lbl">플랜</div><div style="font-size:10px;color:var(--dim)" id="l2-plan-area">—</div></div></div>
+      <div class="ss-item"><div class="ss-val" style="color:var(--green)" id="l2-prod">6</div><div><div class="ss-lbl">제작도</div><div style="font-size:10px;color:var(--dim)" id="l2-prod-area">—</div></div></div>
+      <div class="ss-item"><div class="ss-val" style="color:var(--accent)" id="l2-total-area">—</div><div><div class="ss-lbl">총 면적</div><div style="font-size:10px;color:var(--dim)">m²</div></div></div>
+      <div class="ss-item"><div class="ss-val" style="color:var(--yellow)" id="l2-total-wt">—</div><div><div class="ss-lbl">총 중량</div><div style="font-size:10px;color:var(--dim)">ton</div></div></div>
+    </div>
+    <div class="sec-divider"><span style="width:7px;height:7px;border-radius:50%;background:#3b82f6;display:inline-block"></span>플랜 진행중</div>
+    <div class="proj-grid" id="l2-plan-grid" style="margin-bottom:18px"></div>
+    <div class="sec-divider"><span style="width:7px;height:7px;border-radius:50%;background:var(--green);display:inline-block"></span>제작도 진행중</div>
+    <div class="proj-grid" id="l2-prod-grid"></div>
+  </div>
+</div>
+
+<!-- ═══ LAYER 3: 현장 상세 ═══ -->
+<div class="slide" id="l3">
+  <div class="slide-hdr">
+    <button class="back-btn" onclick="closeL3()">← 현장 목록</button>
+    <div><div class="slide-title" id="l3-title"></div><div class="slide-sub" id="l3-sub"></div></div>
+  </div>
+  <div class="slide-body" id="l3-body"></div>
+</div>
+
+<!-- ═══ MEMBER SLIDE ═══ -->
+<div class="slide" id="member-slide">
+  <div class="slide-hdr">
+    <button class="back-btn" onclick="history.back()">← 대시보드</button>
+    <div><div class="slide-title" id="member-title">팀원 상세</div><div class="slide-sub">담당 현장 및 진행 타임라인</div></div>
+  </div>
+  <div class="slide-body" id="member-body"></div>
+</div>
+
+<!-- ═══ CUMULATIVE SLIDE ═══ -->
+<div class="slide" id="cum-slide">
+  <div class="slide-hdr">
+    <button class="back-btn" onclick="closeCumulative()">← 대시보드</button>
+    <div><div class="slide-title">누적 관리 현황</div><div class="slide-sub">주간 업로드 기반 · 월/연/담당자별 누적</div></div>
+    <div style="display:flex;gap:6px;margin-left:auto">
+      <button onclick="exportCumCSV()" style="background:var(--light);border:1px solid var(--border);color:var(--dim);padding:4px 11px;border-radius:7px;cursor:pointer;font-size:11px;font-family:inherit;font-weight:600">📤 CSV</button>
+      <button onclick="clearAllHistory()" style="background:#fef2f2;border:1px solid #fecaca;color:var(--red);padding:4px 11px;border-radius:7px;cursor:pointer;font-size:11px;font-family:inherit;font-weight:600">🗑 초기화</button>
+    </div>
+  </div>
+  <div class="cum-tabs">
+    <div class="ctab active" id="ctab-week" onclick="switchCumTab('week')">주간 기록</div>
+    <div class="ctab" id="ctab-month" onclick="switchCumTab('month')">월별 현황</div>
+    <div class="ctab" id="ctab-year" onclick="switchCumTab('year')">연간 실적</div>
+    <div class="ctab" id="ctab-member" onclick="switchCumTab('member')">담당자별</div>
+    <div class="ctab" id="ctab-complete" onclick="switchCumTab('complete')">완료 현장 <span class="ctab-badge" id="ctab-comp-count"></span></div>
+  </div>
+  <div class="cum-body" id="cum-body"></div>
+</div>
+
+<!-- ═══ UPLOAD PREVIEW MODAL ═══ -->
+<div class="modal-overlay" id="preview-modal">
+  <div class="modal-box">
+    <div class="modal-hdr">
+      <div><div class="modal-title">📊 업로드 미리보기 — 변경사항 확인</div><div class="slide-sub" id="preview-sub" style="margin-top:2px"></div></div>
+      <button class="btn-cancel" onclick="cancelPreview()" style="padding:3px 10px">✕</button>
+    </div>
+    <div class="modal-body" id="preview-changes"></div>
+    <div class="modal-footer">
+      <button class="btn-cancel" onclick="cancelPreview()">취소</button>
+      <button class="btn-primary" onclick="applyUpdate()">✅ 대시보드에 적용</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ COMPLETE MODAL ═══ -->
+<div class="modal-overlay" id="comp-modal">
+  <div class="modal-box" style="max-width:580px">
+    <div class="modal-hdr">
+      <div><div class="modal-title">✅ 완료 현장 등록</div></div>
+      <button class="btn-cancel" onclick="closeCompModal()" style="padding:3px 10px">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="cf-grid">
+        <div class="cf-full">
+          <label class="cf-label">현장명</label>
+          <input type="text" class="cf-input" id="cf-name" placeholder="현장명 입력">
+        </div>
+        <div>
+          <label class="cf-label">지역 / 국가</label>
+          <select class="cf-select" id="cf-region">
+            <option value="">— 선택 —</option>
+            <option>🇮🇳 인도 (KKI)</option><option>🇰🇪 케냐 (KKEA)</option>
+            <option>🇪🇹 에티오피아</option><option>🇧🇷 브라질</option>
+            <option>🇸🇦 사우디아라비아</option><option>🇦🇪 두바이 (UAE)</option>
+            <option>🇬🇭 가나</option><option>기타</option>
+          </select>
+        </div>
+        <div>
+          <label class="cf-label">설계 유형</label>
+          <select class="cf-select" id="cf-type">
+            <option>플랜</option><option>제작도</option><option>플랜+제작도</option><option>SHELL</option>
+          </select>
+        </div>
+        <div><label class="cf-label">면적 (m²)</label><input type="number" class="cf-input" id="cf-area" placeholder="예: 4300"></div>
+        <div><label class="cf-label">중량 (ton)</label><input type="number" class="cf-input" id="cf-weight" placeholder="예: 99"></div>
+        <div><label class="cf-label">ALU 실적 (ton)</label><input type="number" class="cf-input" id="cf-alu" placeholder="예: 99.0" step="0.1"></div>
+        <div>
+          <label class="cf-label">주담당자</label>
+          <select class="cf-select" id="cf-main">
+            <option value="">— 선택 —</option>
+            <option>황인용</option><option>염용래</option><option>승호연</option>
+            <option>오세곤</option><option>최은미</option><option>박주원</option>
+            <option>탄투이</option><option>MICHAEL</option>
+          </select>
+        </div>
+        <div><label class="cf-label">납품 완료일</label><input type="date" class="cf-input" id="cf-completed"></div>
+        <div><label class="cf-label">발주처</label><input type="text" class="cf-input" id="cf-client" placeholder="KKV, KKEA, KKI"></div>
+        <div>
+          <label class="cf-label">납기 준수</label>
+          <select class="cf-select" id="cf-ontime">
+            <option>✅ 준수</option><option>🚀 조기완료</option><option>⚠️ 지연</option><option>❓ 미정</option>
+          </select>
+        </div>
+        <div class="cf-full"><label class="cf-label">비고</label><textarea class="cf-textarea" id="cf-note" placeholder="특이사항, 메모 등"></textarea></div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-cancel" onclick="closeCompModal()">취소</button>
+      <button class="btn-primary" onclick="saveCompletedSite()">✅ 완료 현장 등록</button>
+    </div>
+  </div>
+</div>
+
+
+<!-- ═══ 팀원 업무 편집 모달 ═══ -->
+<div class="modal-overlay" id="member-edit-modal">
+  <div class="modal-box" style="max-width:520px">
+    <div class="modal-hdr">
+      <div>
+        <div class="modal-title" id="me-title">팀원 업무 편집</div>
+        <div class="slide-sub" id="me-sub" style="margin-top:2px"></div>
+      </div>
+      <button class="btn-cancel" onclick="closeMemberEdit()" style="padding:3px 10px">✕</button>
+    </div>
+    <div class="modal-body">
+      <input type="hidden" id="me-name">
+      <div class="me-field">
+        <label class="me-label">직급 / 소속</label>
+        <input class="me-input" id="me-role" placeholder="팀장 / 파트장 / 파트원 / KKEA">
+      </div>
+      <div class="me-field">
+        <label class="me-label">현재 상태</label>
+        <div class="me-status-row" id="me-status-row">
+          <div class="me-status-btn" onclick="setMeStatus(this,'재직')">● 재직</div>
+          <div class="me-status-btn" onclick="setMeStatus(this,'KKM출장')">◐ KKM출장</div>
+          <div class="me-status-btn" onclick="setMeStatus(this,'육아휴직')">◐ 육아휴직</div>
+          <div class="me-status-btn" onclick="setMeStatus(this,'출장')">◐ 출장</div>
+          <div class="me-status-btn" onclick="setMeStatus(this,'휴직')">◐ 휴직</div>
+        </div>
+      </div>
+      <div class="me-field">
+        <label class="me-label">금주 업무 / 주요 담당 현황</label>
+        <textarea class="me-input me-textarea" id="me-summary" placeholder="업무 내용을 입력하세요"></textarea>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-cancel" onclick="closeMemberEdit()">취소</button>
+      <button class="btn-primary" onclick="saveMemberEdit()">✅ 저장</button>
+    </div>
+  </div>
+</div>
+<div id="_toast"></div>
+<script>
+/* ═══════════════════════════════════════════
+   DATE
+═══════════════════════════════════════════ */
+(function(){
+  const d=new Date();
+  document.getElementById('today-date').textContent=
+    `${d.getFullYear()}.${String(d.getMonth()+1).padStart(2,'0')}.${String(d.getDate()).padStart(2,'0')}`;
+})();
+
+/* ═══════════════════════════════════════════
+   TAB SWITCHING
+═══════════════════════════════════════════ */
+let currentTab=0;
+function switchTab(idx){
+  for(let i=0;i<3;i++){
+    document.getElementById('mtab-'+i).classList.toggle('active',i===idx);
+    document.getElementById('tab-'+i).classList.toggle('active',i===idx);
+  }
+  currentTab=idx;
+  if(idx===1){ applyStoredMemberEdits(); renderTab1(); }
+  if(idx===2) setTimeout(renderCharts,100);
+}
+function goHome(){
+  const order=['l3','kd-slide','member-slide','cum-slide','l2'];
+  order.forEach(id=>{const el=document.getElementById(id);if(el)el.classList.remove('open');});
+}
+
+/* ═══════════════════════════════════════════
+   MASTER DATA — 현장 데이터 (2026.3.26 기준)
+═══════════════════════════════════════════ */
+const SITE_DATA = {
+  /* ── 플랜 진행중 ── */
+  plan: [
+    {id:'pharande', region:'KKI', flag:'🇮🇳', company:'PHARANDE', name:'L-AXIS',
+     area:4300, weight:98.9, client:'KKV', received:'2026-01-13', deadline:'4월', urgent:false,
+     note:'신규 설계의뢰. 4월 납기 목표.', main:'오세곤'},
+    {id:'fama', region:'브라질', flag:'🇧🇷', company:'PALCO', name:'FAMA SUNSET BEACH',
+     area:1095, weight:25.2, client:'KKV', received:'2026-02-24', deadline:'4월', urgent:false,
+     note:'최종 확정 요청중(2/20)', main:'염용래'},
+  ],
+
+  /* ── 제작도 진행중 ── */
+  prod: [
+    {id:'poarr', region:'KKI', flag:'🇮🇳', company:'TOTAL ENVIRONMENT', name:'POARR TWR 8',
+     area:11300, weight:259.9, client:'KKV', received:'2025-05-20', deadline:'확인중', urgent:false,
+     note:'KKV 검도 대기중. 신규10,671+전용629', main:'박주원'},
+    {id:'veranza', region:'KKI', flag:'🇮🇳', company:'TRIFECTA', name:'VERANZA TWR A',
+     area:4268, weight:98.2, client:'KKV', received:'2025-12-04', deadline:'확인중', urgent:false,
+     note:'골조 변경사항 반영중. 변경일 2026.1.6', main:'박주원'},
+    {id:'kcc', region:'KKI', flag:'🇮🇳', company:'KCC DG MAP', name:'T59 COLABA MUMBAI',
+     area:2404, weight:55.3, client:'KKV', received:'2025-12-11', deadline:'확인중', urgent:false,
+     note:'KKV 검도 진행중', main:'박주원'},
+    {id:'tabuk', region:'사우디', flag:'🇸🇦', company:'SOLIMAN', name:'TABUK VALLEY A, B TYPE',
+     area:6770, weight:155.7, client:'5팀', received:'2025-10-17', deadline:'4월', urgent:true,
+     note:'A TYPE-3SET(대칭1SET 전용), B TYPE-2SET(대칭 1SET전용), 1SET 우선 납품', main:'5팀'},
+    {id:'alsadan', region:'사우디', flag:'🇸🇦', company:'SOLIMAN', name:'AL SADAN S TYPE',
+     area:3000, weight:69.0, client:'5팀', received:'2025-10-17', deadline:'4월', urgent:false,
+     note:'2SET, 대칭 2SET - 총 4SET 납품, 1SET우선 납품', main:'5팀'},
+    {id:'avaana', region:'KKI', flag:'🇮🇳', company:'BREN', name:'AVAANA WING A',
+     area:3972, weight:91.4, client:'KKV', received:'2026-02-23', deadline:'확인중', urgent:false,
+     note:'오늘 접수. 납기 일정 확인 중.', main:'오세곤'},
+    {id:'coemanv', region:'브라질', flag:'🇧🇷', company:'PALCO', name:'COEMA NOVA VIDA',
+     area:1466, weight:33.7, client:'KKV', received:'2026-02-24', deadline:'4월', urgent:false,
+     note:'최종 확정 요청중(2/23)', main:'염용래'},
+  ],
+
+  /* ── 설계 보류 ── */
+  hold: [
+    {id:'oryx', region:'KKI', flag:'🇮🇳', company:'COSMOS', name:'ORYX',
+     area:null, weight:null, client:'5팀', received:'2025-06-18', deadline:'—', urgent:false,
+     note:'BCS 설계, 업체요청 보류중', main:'5팀'},
+    {id:'konza', region:'케냐', flag:'🇰🇪', company:'LANDMARK', name:'KONZA A, B',
+     area:763, weight:17.5, client:'5팀', received:'2026-01-21', deadline:'—', urgent:true,
+     note:'대칭동 추가물량 산출(방향성+SC홀추가제품) 확정후 제작도 정리', main:'5팀'},
+    {id:'sagana', region:'케냐', flag:'🇰🇪', company:'SABBIA CIVIL', name:'SAGANA AHP BLK A',
+     area:1800, weight:41.4, client:'5팀', received:'2026-02-05', deadline:'—', urgent:false,
+     note:'KONZA BLK A와 동일, MIRROR동 우선 납품 - 보류, 대칭동 삭제 논의중', main:'5팀'},
+  ],
+
+  /* ── 설계 대기 (SHELL 작업중) ── */
+  shell: [
+    {id:'kilimani', region:'케냐', flag:'🇰🇪', company:'KILIMANI', name:'POLICE P/J',
+     area:null, weight:null, client:'KKEA', received:'2023-09-06', deadline:'—', urgent:false,
+     note:'골조는 확정이나 미계약등으로 의뢰서 미접수, 설계 보류', main:'KKEA'},
+    {id:'ukraine', region:'우크라이나', flag:'🇺🇦', company:'M7', name:'—',
+     area:null, weight:null, client:'5팀', received:'—', deadline:'—', urgent:false,
+     note:'PDF파일 접수, 전반적인 골조 재점검후 전달예정(몇개월 소요 예상)체크리스트 대기', main:'5팀'},
+    {id:'greenman', region:'북사이프러스', flag:'🇨🇾', company:'GREEN MAN', name:'SK20-24R',
+     area:1126, weight:25.9, client:'5팀', received:'2024-04-29', deadline:'—', urgent:false,
+     note:'최종확정 요청중, 하우징, 3개층 각 층별 납품', main:'5팀'},
+    {id:'sedra', region:'사우디', flag:'🇸🇦', company:'TAKWEEN', name:'SEDRA',
+     area:1500, weight:34.5, client:'5팀', received:'2024-07-19', deadline:'—', urgent:false,
+     note:'2차 체크리스트 전송(8/2), takween follow up 없음, 납기 지연 예상', main:'5팀'},
+    {id:'birla', region:'KKI', flag:'🇮🇳', company:'LEIGHTON', name:'BIRLA NIYAARA TWR A',
+     area:null, weight:null, client:'KKI', received:'—', deadline:'—', urgent:false,
+     note:'73~층 층변화 골조협의중 (CORE, FAÇADE)', main:'KKI'},
+    {id:'palmjebel', region:'두바이', flag:'🇦🇪', company:'SHAPOORJI', name:'PALM JEBEL ALI BVD',
+     area:2924, weight:67.3, client:'5팀', received:'2025-11-24', deadline:'확인중', urgent:false,
+     note:'골조변경사항 체크리스트 전송예정(11/28), BVH3+SVG1 SET전용하여 2SET납품', main:'5팀'},
+    {id:'dahlias', region:'KKI', flag:'🇮🇳', company:'DLF', name:'DAHLIAS 3&7',
+     area:null, weight:null, client:'KKI', received:'2026-01-20', deadline:'확인중', urgent:false,
+     note:'협의 진행중, CORE만 납품, 선행(갱폼+시스템발판), 갱폼적용 납품, 총8개동', main:'KKI'},
+    {id:'tabukplus', region:'사우디', flag:'🇸🇦', company:'SOLIMAN', name:'TABUK VALLEY A+, B+ TYPE',
+     area:6855, weight:157.7, client:'5팀', received:'2025-10-17', deadline:'확인중', urgent:false,
+     note:'체크리스트 답변 대기중, A+ 2SET, B+ 3SET (GR+1F는 A,B와 동일)', main:'5팀'},
+    {id:'alsadanem', region:'사우디', flag:'🇸🇦', company:'SOLIMAN', name:'AL SADAN END, MID TYPE',
+     area:11440, weight:263.1, client:'5팀', received:'2025-10-17', deadline:'확인중', urgent:false,
+     note:'골조변경 접수대기, MID(2)+END(2)조합하는 동 기준으로 2SET납품', main:'5팀'},
+    {id:'sterling', region:'트리니다드토바고', flag:'🏝️', company:'DAV', name:'STERLING COURT',
+     area:610, weight:14.0, client:'KKEA', received:'2026-03-11', deadline:'5월', urgent:false,
+     note:'2차 체크리스트 작업 중, 인치도면 MM로 협의', main:'KKEA'},
+    {id:'b3prio', region:'브라질', flag:'🇧🇷', company:'PALCO', name:'B3P RIO VERDE',
+     area:858, weight:19.7, client:'KKEA', received:'2026-03-10', deadline:'6월', urgent:false,
+     note:'2차 체크리스트 답변 대기 중, 럼섬계약으로 물량 주의', main:'KKEA'},
+    {id:'b3pitu', region:'브라질', flag:'🇧🇷', company:'PALCO', name:'B3P ITUMBIARA',
+     area:776, weight:17.8, client:'KKEA', received:'2026-03-10', deadline:'6월', urgent:false,
+     note:'2차 체크리스트 답변 대기 중, 럼섬계약으로 물량 주의', main:'KKEA'},
+  ],
+
+  /* ── 설계 대기 (예정) ── */
+  pending: [
+    {id:'trasacco', region:'가나', flag:'🇬🇭', company:'Trasacco Properties', name:'Trasacco VILA',
+     area:1275, weight:29.3, client:'KKEA', received:'—', deadline:'—', urgent:false,
+     note:'최종 확정 요청 진행중', main:'KKEA'},
+    {id:'greenville', region:'케냐', flag:'🇰🇪', company:'Acme Pais', name:'Greenville',
+     area:4470, weight:102.8, client:'KKEA', received:'—', deadline:'—', urgent:false,
+     note:'체크리스트중', main:'KKEA'},
+    {id:'apu', region:'KKI', flag:'🇮🇳', company:'SPCPL', name:'APU EMPLOYEE/HOSTEL',
+     area:null, weight:null, client:'KKI', received:'—', deadline:'—', urgent:false,
+     note:'TERRACE층+상층부 층변화 협의중', main:'KKI'},
+    {id:'arika', region:'KKI', flag:'🇮🇳', company:'BIRLA', name:'ARIKA T1,3,4,7',
+     area:13012, weight:299.3, client:'KKI', received:'—', deadline:'—', urgent:false,
+     note:'체크리스트중', main:'KKI'},
+    {id:'jogoo', region:'케냐', flag:'🇰🇪', company:'LANDMARK', name:'JOGOO ROAD',
+     area:null, weight:null, client:'KKEA', received:'—', deadline:'—', urgent:false,
+     note:'확정 의뢰대기중', main:'KKEA'},
+    {id:'fahid', region:'두바이', flag:'🇦🇪', company:'SHAPOORJI', name:'FAHID BEACH RESIDENCES',
+     area:19894, weight:457.6, client:'5팀', received:'2026-01-27', deadline:'—', urgent:false,
+     note:'골조미확정, 7개동, 기존 납품+보유물량 전용, 견적물량 전달. 수주확정 대기', main:'5팀'},
+    {id:'sejal', region:'KKI', flag:'🇮🇳', company:'SEJAL', name:'2 TOWERS',
+     area:12000, weight:276.0, client:'KKI', received:'—', deadline:'—', urgent:false,
+     note:'신규 접수예정', main:'KKI'},
+    {id:'dbtw4', region:'KKI', flag:'🇮🇳', company:'TOTAL ENVIRONMENT', name:'DBTW TOWER4',
+     area:7070, weight:162.6, client:'KKI', received:'—', deadline:'—', urgent:false,
+     note:'체크리스트중, DBTW T2 동일', main:'KKI'},
+    {id:'ananta', region:'KKI', flag:'🇮🇳', company:'BREN', name:'ANANTA T-A,B,C',
+     area:9168, weight:210.9, client:'KKI', received:'—', deadline:'—', urgent:false,
+     note:'체크리스트중', main:'KKI'},
+    {id:'imperia', region:'KKI', flag:'🇮🇳', company:'BREN', name:'IMPERIA W-1,2,3',
+     area:4110, weight:94.5, client:'KKI', received:'—', deadline:'—', urgent:false,
+     note:'체크리스트중', main:'KKI'},
+    {id:'kalyani', region:'KKI', flag:'🇮🇳', company:'KALYANI', name:'T-3, T-4',
+     area:2890, weight:66.5, client:'KKI', received:'—', deadline:'—', urgent:false,
+     note:'원도 접수 대기', main:'KKI'},
+    {id:'azuri', region:'모리셔스', flag:'🏝️', company:'GENERAL CONSTRUCTION', name:'AZURI MELEANE',
+     area:null, weight:null, client:'KKEA', received:'—', deadline:'—', urgent:false,
+     note:'체크리스트중', main:'KKEA'},
+  ]
+};
+
+/* 수출 물량 데이터 (Sheet1) */
+const EXPORT_DATA = {
+  rows:[
+    {country:'인도',  m3:0,  m3w:0,  m4:2, m4w:99,  m5:0, m5w:0,   m6p:3, m6pw:413},
+    {country:'사우디', m3:0, m3w:0,  m4:2, m4w:92,  m5:2, m5w:133, m6p:3, m6pw:456},
+    {country:'브라질', m3:0, m3w:0,  m4:2, m4w:59,  m5:0, m5w:0,   m6p:2, m6pw:38},
+    {country:'케냐',  m3:0,  m3w:0,  m4:0, m4w:0,   m5:0, m5w:0,   m6p:2, m6pw:59},
+    {country:'두바이', m3:0, m3w:0,  m4:0, m4w:0,   m5:0, m5w:0,   m6p:1, m6pw:67},
+    {country:'북사이프러스',m3:0,m3w:0,m4:0,m4w:0, m5:0, m5w:0,   m6p:1, m6pw:26},
+    {country:'트리니다드토바고',m3:0,m3w:0,m4:0,m4w:0,m5:1,m5w:14,m6p:0,m6pw:0},
+  ],
+  totals:{m3:0,m3w:0,m4:6,m4w:250,m5:3,m5w:147,m6p:12,m6pw:1059,total:21,totalw:1456}
+};
+
+/* ═══════════════════════════════════════════
+   팀원 데이터
+═══════════════════════════════════════════ */
+const MEMBERS = {
+  '황인용':{av:'황',color:'#7c3aed',role:'팀장',status:'재직',
+    summary:'팀 전체 진행 관리 및 KKV 검도 대응. 해외설계 전반 총괄.',
+    projects:['pharande','fama','poarr','veranza','kcc','tabuk','alsadan','avaana','coemanv']},
+  '염용래':{av:'염',color:'#ea580c',role:'파트장',status:'재직',
+    summary:'브라질 FAMA SUNSET BEACH 플랜, COEMA NOVA VIDA 제작도 메인 담당.',
+    projects:['fama','coemanv']},
+  '승호연':{av:'승',color:'#d97706',role:'파트원',status:'재직',
+    summary:'사우디 SOLIMAN AL SADAN S TYPE, B+ TYPE 설계.',
+    projects:[]},
+  '오세곤':{av:'오',color:'#2563eb',role:'파트원',status:'재직',
+    summary:'사우디 SOLIMAN TABUK A+, B+ TYPE 골조, A 타입 수정설계.',
+    projects:['pharande','avaana']},
+  '최은미':{av:'최',color:'#dc2626',role:'파트원',status:'재직',
+    summary:'사우디 SOLIMAN S, B TYPE 계단.',
+    projects:[]},
+  '박주원':{av:'박',color:'#059669',role:'파트원',status:'재직',
+    summary:'해외 설계 파트원.',
+    projects:[]},
+  '탄투이':{av:'탄',color:'#0d9488',role:'파트원',status:'재직',
+    summary:'사우디 SOLIMAN A TYPE 계단, 셋팅도면.',
+    projects:[]},
+  'MICHAEL':{av:'M',color:'#db2777',role:'KKEA',status:'재직',
+    summary:'케냐 신규현장, 브라질, 트리니다드토바고 골조, 국내 견적.',
+    projects:['fama','coemanv']}
+};
+
+/* 현장 상세 데이터 */
+const PD = {
+  pharande:{title:'KKI PHARANDE L-AXIS',sub:'인도 · 플랜 진행중 · 2026/1/13 접수',
+    kpis:[{l:'총 면적',v:'4,300 m²',c:'#2563eb'},{l:'중량',v:'98.9 t',c:'#059669'},{l:'납기',v:'4월',c:'#d97706'},{l:'발주처',v:'KKV',c:'#2563eb'}],
+    info:{지역:'🇮🇳 인도 (KKI)',접수일:'2026년 1월 13일',납기:'2026년 4월',담당:'KKV',상태:'플랜 진행중',비고:'신규 설계의뢰. 4월 납기 목표.'},
+    designers:[{name:'오세곤',av:'오',color:'#2563eb',role:'5파트원 (MAIN)',task:'플랜 진행 담당'},{name:'황인용',av:'황',color:'#7c3aed',role:'팀장 (SUB)',task:'전체 진행 관리 및 검토'}],
+    tl:[{c:'#2563eb',t:'설계의뢰 접수',m:'2026. 01. 13',n:'KKV로부터 설계의뢰 공문 접수. 플랜 착수 지시.',who:'황인용'},{c:'#059669',t:'플랜 착수',m:'2026. 01. 중순',n:'오세곤 담당자 배정 후 플랜 작업 시작.',who:'오세곤'},{c:'#d97706',t:'플랜 진행중',m:'현재',n:'4월 납기 목표로 플랜 진행중. KKV 검도 전.',who:'오세곤'},{c:'#cbd5e1',t:'납기 목표',m:'2026년 4월',n:'KKV 납품 완료.',who:'-'}]},
+  fama:{title:'PALCO FAMA SUNSET BEACH',sub:'브라질 · 플랜 진행중 · 2026/2/24 접수',
+    kpis:[{l:'총 면적',v:'1,095 m²',c:'#2563eb'},{l:'중량',v:'25.2 t',c:'#059669'},{l:'납기',v:'4월',c:'#d97706'},{l:'발주처',v:'KKV',c:'#2563eb'}],
+    info:{지역:'🇧🇷 브라질',접수일:'2026년 2월 24일',납기:'2026년 4월',담당:'KKV',상태:'플랜 진행중',비고:'최종 확정 요청중(2/20)'},
+    designers:[{name:'염용래',av:'염',color:'#ea580c',role:'5파트장 (MAIN)',task:'브라질 FAMA SUNSET BEACH 플랜 담당'},{name:'황인용',av:'황',color:'#7c3aed',role:'팀장 (SUB)',task:'브라질 체크 및 KKV 검도 대응'}],
+    tl:[{c:'#2563eb',t:'설계의뢰 접수',m:'2026. 02. 24',n:'KKV로부터 FAMA SUNSET BEACH 설계의뢰 접수.',who:'황인용'},{c:'#059669',t:'플랜 착수',m:'2026. 02. 24',n:'염용래 담당 배정 후 플랜 착수.',who:'염용래'},{c:'#d97706',t:'플랜 진행중',m:'현재',n:'4월 납기 목표 플랜 진행중.',who:'염용래'},{c:'#cbd5e1',t:'납기 목표',m:'2026년 4월',n:'KKV 납품 완료.',who:'-'}]},
+  poarr:{title:'TOTAL ENVIRONMENT POARR TWR 8',sub:'인도 · 제작도 진행중 · KKV 검도 대기 · 2025/5/20 접수',
+    kpis:[{l:'총 면적',v:'11,300 m²',c:'#2563eb'},{l:'중량',v:'259.9 t',c:'#059669'},{l:'신규',v:'10,671 m²',c:'#0d9488'},{l:'전용',v:'629 m²',c:'#d97706'}],
+    info:{지역:'🇮🇳 인도 (KKI)',접수일:'2025년 5월 20일',납기:'확인중',담당:'KKV',상태:'제작도 진행중',비고:'KKV 검도 대기 중.'},
+    designers:[{name:'박주원',av:'박',color:'#059669',role:'5파트원 (MAIN)',task:'POARR TWR 8 제작도 담당'},{name:'승호연',av:'승',color:'#d97706',role:'5파트원 (SUB)',task:'KKM 출장 Revit 교육 중'},{name:'황인용',av:'황',color:'#7c3aed',role:'팀장',task:'KKV 검도 대응 및 납기 협의'}],
+    tl:[{c:'#2563eb',t:'설계의뢰 접수',m:'2025. 05. 20',n:'KKI TOTAL ENVIRONMENT POARR TWR 8 접수.',who:'황인용'},{c:'#7c3aed',t:'제작도 착수',m:'2025. 06. 초',n:'박주원 담당 배정 후 제작도 작업 시작.',who:'박주원'},{c:'#059669',t:'제작도 진행중',m:'현재',n:'KKV 검도 전. 제작도 마무리 단계.',who:'박주원'},{c:'#cbd5e1',t:'납기',m:'확인중',n:'KKV 검도 후 납기 확정.',who:'-'}]},
+  veranza:{title:'TRIFECTA VERANZA TWR A',sub:'인도 · 제작도 진행중 · 골조변경 반영중 · 2025/12/4 접수',
+    kpis:[{l:'총 면적',v:'4,268 m²',c:'#2563eb'},{l:'중량',v:'98.2 t',c:'#059669'},{l:'변경일',v:'2026/1/6',c:'#d97706'},{l:'납기',v:'확인중',c:'#db2777'}],
+    info:{지역:'🇮🇳 인도 (KKI)',접수일:'2025년 12월 4일',변경일:'2026년 1월 6일',납기:'확인중',담당:'KKV',상태:'제작도 진행중',비고:'골조 변경 사항 반영 중.'},
+    designers:[{name:'박주원',av:'박',color:'#059669',role:'5파트원 (MAIN)',task:'VERANZA TWR A 제작도 담당'},{name:'황인용',av:'황',color:'#7c3aed',role:'팀장 (SUB)',task:'KKV 검도 대응'}],
+    tl:[{c:'#2563eb',t:'설계의뢰 접수',m:'2025. 12. 04',n:'KKI TRIFECTA VERANZA TWR A 접수.',who:'황인용'},{c:'#d97706',t:'골조 변경 접수',m:'2026. 01. 06',n:'골조 변경 사항 도면 접수. 제작도 수정 착수.',who:'박주원'},{c:'#059669',t:'제작도 진행중',m:'현재',n:'변경된 골조 기반 제작도 작업중.',who:'박주원'},{c:'#cbd5e1',t:'납기',m:'확인중',n:'검도 후 납기 확정.',who:'-'}]},
+  kcc:{title:'KCC DG MAP T59 COLABA MUMBAI',sub:'인도 뭄바이 · 제작도 진행중 · KKV 검도 대기 · 2025/12/11 접수',
+    kpis:[{l:'총 면적',v:'2,404 m²',c:'#2563eb'},{l:'중량',v:'55.3 t',c:'#059669'},{l:'접수일',v:'2025/12/11',c:'#0d9488'},{l:'납기',v:'확인중',c:'#db2777'}],
+    info:{지역:'🇮🇳 인도 뭄바이 (KKI)',접수일:'2025년 12월 11일',납기:'확인중',담당:'KKV',상태:'제작도 진행중',비고:'KKV 검도 진행 중.'},
+    designers:[{name:'박주원',av:'박',color:'#059669',role:'5파트원 (MAIN)',task:'KCC DG MAP T59 제작도 담당'},{name:'황인용',av:'황',color:'#7c3aed',role:'팀장 (SUB)',task:'KKV 검도 대응 및 납기 협의'}],
+    tl:[{c:'#2563eb',t:'설계의뢰 접수',m:'2025. 12. 11',n:'KKI KCC DG MAP T59 COLABA 뭄바이 접수.',who:'황인용'},{c:'#059669',t:'제작도 착수',m:'2025. 12. 중순',n:'박주원 배정 후 제작도 작업 시작.',who:'박주원'},{c:'#cbd5e1',t:'납기',m:'확인중',n:'검도 후 납기 확정.',who:'-'}]},
+  tabuk:{title:'SOLIMAN TABUK VALLEY A, B TYPE',sub:'사우디 · 제작도 진행중 · 긴급 · 2025/10/17 접수',
+    kpis:[{l:'총 면적',v:'6,770 m²',c:'#2563eb'},{l:'중량',v:'155.7 t',c:'#059669'},{l:'납기',v:'4월',c:'#dc2626'},{l:'SET',v:'A:3SET B:2SET',c:'#7c3aed'}],
+    info:{지역:'🇸🇦 사우디아라비아',접수일:'2025년 10월 17일',변경일:'2026년 1월 5일',납기:'2026년 4월',담당:'5팀',상태:'제작도 진행중 (긴급)',비고:'A TYPE-3SET(대칭1SET 전용), B TYPE-2SET(대칭 1SET전용), 1SET 우선 납품'},
+    designers:[{name:'황인용',av:'황',color:'#7c3aed',role:'팀장 (MAIN)',task:'사우디 TABUK VALLEY 전체 진행 관리'},{name:'탄투이',av:'탄',color:'#0d9488',role:'5파트원',task:'제작도 진행'}],
+    tl:[{c:'#2563eb',t:'설계의뢰 접수',m:'2025. 10. 17',n:'SOLIMAN TABUK VALLEY A, B TYPE 접수.',who:'황인용'},{c:'#d97706',t:'골조 변경 접수',m:'2026. 01. 05',n:'A+B TYPE 골조 변경 접수.',who:'황인용'},{c:'#dc2626',t:'제작도 진행중 (긴급)',m:'현재',n:'4월 납기 긴급 진행중.',who:'탄투이'},{c:'#cbd5e1',t:'납기 목표',m:'2026년 4월',n:'1SET 우선 납품.',who:'-'}]},
+  alsadan:{title:'SOLIMAN AL SADAN S TYPE',sub:'사우디 · 제작도 진행중 · 2025/10/17 접수',
+    kpis:[{l:'총 면적',v:'3,000 m²',c:'#2563eb'},{l:'중량',v:'69.0 t',c:'#059669'},{l:'납기',v:'4월',c:'#d97706'},{l:'SET',v:'총 4SET',c:'#7c3aed'}],
+    info:{지역:'🇸🇦 사우디아라비아',접수일:'2025년 10월 17일',납기:'2026년 4월',담당:'5팀',상태:'제작도 진행중',비고:'2SET, 대칭 2SET - 총 4SET 납품, 1SET 우선 납품'},
+    designers:[{name:'황인용',av:'황',color:'#7c3aed',role:'팀장 (MAIN)',task:'사우디 AL SADAN 진행 관리'}],
+    tl:[{c:'#2563eb',t:'설계의뢰 접수',m:'2025. 10. 17',n:'SOLIMAN AL SADAN S TYPE 접수.',who:'황인용'},{c:'#d97706',t:'제작도 진행중',m:'현재',n:'4월 납기 목표 진행중.',who:'황인용'},{c:'#cbd5e1',t:'납기 목표',m:'2026년 4월',n:'1SET 우선 납품.',who:'-'}]},
+  avaana:{title:'BREN AVAANA WING A',sub:'인도 · 제작도 진행중 · 2026/2/23 접수',
+    kpis:[{l:'총 면적',v:'3,972 m²',c:'#2563eb'},{l:'중량',v:'91.4 t',c:'#059669'},{l:'납기',v:'확인중',c:'#db2777'},{l:'발주처',v:'KKV',c:'#2563eb'}],
+    info:{지역:'🇮🇳 인도 (KKI)',접수일:'2026년 2월 23일',납기:'확인중',담당:'KKV',상태:'제작도 진행중',비고:'납기 일정 확인 중.'},
+    designers:[{name:'오세곤',av:'오',color:'#2563eb',role:'5파트원 (MAIN)',task:'인도 AVAANA WING A 담당'},{name:'황인용',av:'황',color:'#7c3aed',role:'팀장 (SUB)',task:'납기 확인 및 KKV 대응'}],
+    tl:[{c:'#2563eb',t:'설계의뢰 접수',m:'2026. 02. 23',n:'KKV로부터 AVAANA WING A 설계의뢰 접수.',who:'황인용'},{c:'#db2777',t:'납기 확인중',m:'현재',n:'납기 일정 협의 중.',who:'황인용'},{c:'#cbd5e1',t:'착수 예정',m:'납기 확정 후',n:'오세곤 배정 예정.',who:'오세곤'}]},
+  coemanv:{title:'PALCO COEMA NOVA VIDA',sub:'브라질 · 제작도 진행중 · 2026/2/24 접수',
+    kpis:[{l:'총 면적',v:'1,466 m²',c:'#2563eb'},{l:'중량',v:'33.7 t',c:'#059669'},{l:'납기',v:'4월',c:'#d97706'},{l:'발주처',v:'KKV',c:'#2563eb'}],
+    info:{지역:'🇧🇷 브라질',접수일:'2026년 2월 24일',납기:'2026년 4월',담당:'KKV',상태:'제작도 진행중',비고:'최종 확정 요청중(2/23)'},
+    designers:[{name:'염용래',av:'염',color:'#ea580c',role:'5파트장 (MAIN)',task:'브라질 COEMA NOVA VIDA 제작도 담당'},{name:'황인용',av:'황',color:'#7c3aed',role:'팀장 (SUB)',task:'브라질 체크 및 KKV 검도 대응'}],
+    tl:[{c:'#2563eb',t:'설계의뢰 접수',m:'2026. 02. 24',n:'KKV로부터 브라질 COEMA NOVA VIDA 설계의뢰 접수.',who:'황인용'},{c:'#059669',t:'제작도 착수',m:'2026. 02. 24',n:'염용래 담당 배정 후 제작도 착수.',who:'염용래'},{c:'#d97706',t:'제작도 진행중',m:'현재',n:'4월 납기 목표 제작도 진행중.',who:'염용래'},{c:'#cbd5e1',t:'납기 목표',m:'2026년 4월',n:'KKV 납품 완료.',who:'-'}]}
+};
+
+
+/* ═══════════════════════════════════════════
+   REGION → CSS CLASS
+═══════════════════════════════════════════ */
+function regionClass(region){
+  if(!region) return 'c-in';
+  const r=region.toString().toLowerCase();
+  if(r.includes('kki')||r.includes('인도')) return 'c-in';
+  if(r.includes('케냐')) return 'c-ke';
+  if(r.includes('에티오피아')) return 'c-et';
+  if(r.includes('브라질')) return 'c-br';
+  if(r.includes('사우디')) return 'c-sa';
+  if(r.includes('두바이')||r.includes('uae')) return 'c-du';
+  if(r.includes('가나')) return 'c-ga';
+  if(r.includes('우크라이나')) return 'c-ua';
+  if(r.includes('북사이프러스')||r.includes('사이프러스')) return 'c-cy';
+  if(r.includes('트리니다드')||r.includes('모리셔스')) return 'c-tt';
+  return 'c-in';
+}
+
+function regionEmoji(region){
+  if(!region) return '🌍';
+  const r=region.toString();
+  if(r.includes('KKI')||r.includes('인도')) return '🇮🇳';
+  if(r.includes('케냐')) return '🇰🇪';
+  if(r.includes('에티오피아')) return '🇪🇹';
+  if(r.includes('브라질')) return '🇧🇷';
+  if(r.includes('사우디')) return '🇸🇦';
+  if(r.includes('두바이')) return '🇦🇪';
+  if(r.includes('가나')) return '🇬🇭';
+  if(r.includes('우크라이나')) return '🇺🇦';
+  if(r.includes('북사이프러스')) return '🇨🇾';
+  if(r.includes('트리니다드')) return '🏝️';
+  if(r.includes('모리셔스')) return '🏝️';
+  return '🌍';
+}
+
+/* ═══════════════════════════════════════════
+   TAB 0 RENDER: 현장 현황
+═══════════════════════════════════════════ */
+function renderTab0(){
+  renderSiteSection('plan-grid', SITE_DATA.plan, 'plan', 'plan-count', 'plan-subtotal');
+  renderSiteSection('prod-grid', SITE_DATA.prod, 'prod', 'prod-count', 'prod-subtotal');
+  renderSiteSection('hold-grid', SITE_DATA.hold, 'hold', 'hold-count', 'hold-subtotal');
+  const waitAll = [...SITE_DATA.shell, ...SITE_DATA.pending];
+  renderSiteSection('wait-grid', waitAll, 'shell', 'wait-count', 'wait-subtotal');
+  // 상단 요약 카드 업데이트
+  const planArea=SITE_DATA.plan.reduce((a,s)=>a+(s.area||0),0);
+  const prodArea=SITE_DATA.prod.reduce((a,s)=>a+(s.area||0),0);
+  const holdArea=SITE_DATA.hold.reduce((a,s)=>a+(s.area||0),0);
+  const waitArea=waitAll.reduce((a,s)=>a+(s.area||0),0);
+  document.getElementById('sum-plan').textContent=SITE_DATA.plan.length;
+  document.getElementById('sum-plan-area').textContent=planArea.toLocaleString()+' m²';
+  document.getElementById('sum-prod').textContent=SITE_DATA.prod.length;
+  document.getElementById('sum-prod-area').textContent=prodArea.toLocaleString()+' m²';
+  document.getElementById('sum-hold').textContent=SITE_DATA.hold.length;
+  document.getElementById('sum-hold-area').textContent=holdArea.toLocaleString()+' m²';
+  document.getElementById('sum-wait').textContent=waitAll.length;
+  document.getElementById('sum-wait-area').textContent=waitArea.toLocaleString()+' m²';
+  updateTab0Badge();
+}
+
+function renderSiteSection(gridId, sites, typeKey, countId, subtotalId){
+  const grid = document.getElementById(gridId);
+  const countEl = document.getElementById(countId);
+  const subtotalEl = document.getElementById(subtotalId);
+  if(!grid) return;
+
+  const accentColors={plan:'#1d4ed8',prod:'#059669',hold:'#ea580c',shell:'#7c3aed'};
+  const tagMap={
+    plan:{cls:'t-plan',lbl:'플랜'},
+    prod:{cls:'t-prod',lbl:'제작도'},
+    hold:{cls:'t-hold',lbl:'보류'},
+    shell:{cls:'t-shell',lbl:'대기'}
+  };
+  const accent=accentColors[typeKey]||'#64748b';
+
+  let html='';
+  let totalArea=0,totalWt=0,validArea=0;
+  sites.forEach(s=>{
+    const cls=regionClass(s.region);
+    const emoji=s.flag||regionEmoji(s.region);
+    const areaStr=s.area?s.area.toLocaleString()+' m²':'—';
+    const wtStr=s.weight?s.weight.toFixed(1)+' t':'—';
+    if(s.area){totalArea+=s.area;validArea++;}
+    if(s.weight) totalWt+=s.weight;
+
+    const dlTag=s.urgent
+      ?`<span class="tag t-urg" style="font-size:9px">⚡긴급</span>`
+      :s.deadline&&s.deadline!=='—'
+        ?`<span class="tag t-wait" style="font-size:9px">${s.deadline}</span>`
+        :'';
+    const clientBadge=s.client&&s.client!=='—'
+      ?`<span class="tag t-kkv">${s.client}</span>`:'';
+    const tag=tagMap[typeKey];
+    const canClick=PD[s.id]?`onclick="openL3('${s.id}')"`:'' ;
+    const canClickStyle=PD[s.id]?'':`cursor:default`;
+    const urgentBg=s.urgent?'background:#fff5f5;':'';
+
+    html+=`<div class="site-row" ${canClick} style="${urgentBg}" >
+      <span class="tag ${tag.cls}" style="min-width:38px;justify-content:center">${tag.lbl}</span>
+      <div class="sr-left">
+        <div class="sr-name">${s.company} ${s.name}</div>
+        <div class="sr-meta">
+          <span class="ctag ${cls}">${emoji} ${s.region}</span>
+          ${dlTag}
+        </div>
+      </div>
+      <div class="sr-right">
+        <div class="sr-area">${areaStr}</div>
+        <div class="sr-wt">${wtStr}</div>
+      </div>
+      <div style="width:16px;text-align:right">${PD[s.id]?`<span style="color:${accent};font-size:12px;opacity:.5">›</span>`:`<span style="color:transparent">›</span>`}${clientBadge}</div>
+    </div>`;
+  });
+
+  if(html==='') html=`<div class="empty-state">현재 해당 현황 없음</div>`;
+  grid.innerHTML=html;
+  if(countEl) countEl.textContent=sites.length+'건';
+  if(subtotalEl){
+    const areaStr=validArea>0?totalArea.toLocaleString()+' m²':'—';
+    const wtStr=totalWt>0?totalWt.toFixed(1)+' t':'—';
+    subtotalEl.innerHTML=`<span>소계 <strong>${sites.length}건</strong></span><span>${areaStr} · <strong>${wtStr}</strong></span>`;
+  }
+}
+
+function updateTab0Badge(){
+  const total = SITE_DATA.plan.length + SITE_DATA.prod.length + SITE_DATA.hold.length + SITE_DATA.shell.length + SITE_DATA.pending.length;
+  document.getElementById('tab0-badge').textContent = total+'건';
+}
+
+/* ═══════════════════════════════════════════
+   TAB 1 RENDER: 설계 진행상황
+═══════════════════════════════════════════ */
+function renderTab1(){
+  // KPI
+  const planArea = SITE_DATA.plan.reduce((a,s)=>a+(s.area||0),0);
+  const prodArea = SITE_DATA.prod.reduce((a,s)=>a+(s.area||0),0);
+  const holdArea = SITE_DATA.hold.reduce((a,s)=>a+(s.area||0),0);
+  const waitArea = [...SITE_DATA.shell,...SITE_DATA.pending].reduce((a,s)=>a+(s.area||0),0);
+  document.getElementById('kpi-plan').textContent = SITE_DATA.plan.length;
+  document.getElementById('kpi-plan-sub').textContent = planArea.toLocaleString()+' m²';
+  document.getElementById('kpi-prod').textContent = SITE_DATA.prod.length;
+  document.getElementById('kpi-prod-sub').textContent = prodArea.toLocaleString()+' m²';
+  document.getElementById('kpi-hold').textContent = SITE_DATA.hold.length;
+  document.getElementById('kpi-hold-sub').textContent = holdArea.toLocaleString()+' m²';
+  document.getElementById('kpi-wait').textContent = SITE_DATA.shell.length + SITE_DATA.pending.length;
+  document.getElementById('kpi-wait-sub').textContent = waitArea.toLocaleString()+' m²';
+  const maxArea = Math.max(planArea,prodArea,holdArea,waitArea)||1;
+  document.getElementById('kpi-plan-bar').style.width=(planArea/maxArea*100)+'%';
+  document.getElementById('kpi-prod-bar').style.width=(prodArea/maxArea*100)+'%';
+  document.getElementById('kpi-hold-bar').style.width=(holdArea/maxArea*100)+'%';
+  document.getElementById('kpi-wait-bar').style.width=(waitArea/maxArea*100)+'%';
+
+  // 팀원 카드
+  renderMemberGrid();
+  // 주요현황
+  renderStatusTable();
+  // 법인별
+  renderCorpList();
+  // 수출국가별
+  renderExportCountryList();
+}
+
+function renderMemberGrid(){
+  const grid = document.getElementById('member-grid');
+  if(!grid) return;
+  // 항상 최신 저장 데이터 반영
+  applyStoredMemberEdits();
+  let html='';
+  Object.entries(MEMBERS).forEach(([name,m])=>{
+    const statusColor = m.status==='재직'?'var(--green)':m.status.includes('출장')?'var(--yellow)':'var(--red)';
+    const projNames = m.projects.slice(0,3).map(pid=>{
+      const s = [...SITE_DATA.plan,...SITE_DATA.prod].find(s=>s.id===pid);
+      return s ? s.company+' '+s.name : pid;
+    });
+    const projHTML = projNames.map(n=>`<div class="mc-proj-tag">${n}</div>`).join('');
+    html += `<div class="mc" onclick="openMember('${name}')">
+      <button class="mc-edit-btn" onclick="openMemberEdit('${name}',event)">✏️ 편집</button>
+      <div class="mc-top">
+        <div class="mc-av" style="background:${m.color}">${m.av}</div>
+        <div style="flex:1">
+          <div class="mc-name">${name}</div>
+          <div class="mc-role">${m.role}</div>
+        </div>
+        <div class="mc-status" style="color:${statusColor};font-size:11px;font-weight:600">${m.status}</div>
+      </div>
+      <div style="font-size:10px;color:var(--dim);margin-bottom:4px;line-height:1.5">${m.summary.length>50?m.summary.substring(0,50)+'...':m.summary}</div>
+      <div class="mc-projs">${projHTML}</div>
+    </div>`;
+  });
+  grid.innerHTML=html;
+}
+
+function renderStatusTable(){
+  const tbody = document.getElementById('status-tbl-body');
+  if(!tbody) return;
+  const urgent = [...SITE_DATA.plan,...SITE_DATA.prod,...SITE_DATA.hold,...SITE_DATA.shell]
+    .filter(s=>s.urgent||s.deadline==='확인중'||s.deadline==='긴급');
+  let html='';
+  urgent.forEach(s=>{
+    const urgTag = s.urgent ? `<span class="tag t-urg" style="font-size:9px">⚡긴급</span>` : `<span class="tag t-chk" style="font-size:9px">확인중</span>`;
+    const typeKey = SITE_DATA.plan.includes(s)?'plan':SITE_DATA.prod.includes(s)?'prod':SITE_DATA.hold.includes(s)?'hold':'shell';
+    const tagMap={plan:'t-plan',prod:'t-prod',hold:'t-hold',shell:'t-shell'};
+    html+=`<tr>
+      <td style="font-weight:600;max-width:140px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${s.company} ${s.name}</td>
+      <td><span class="ctag ${regionClass(s.region)}">${s.flag||''} ${s.region}</span></td>
+      <td>${urgTag}</td>
+      <td><span style="font-size:10px;color:var(--dim)">${s.deadline||'—'}</span></td>
+      <td style="font-size:10px;color:var(--dim);max-width:160px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${(s.note||'').substring(0,40)}</td>
+    </tr>`;
+  });
+  // 추가: 최근 접수 현장
+  const recent = [...SITE_DATA.plan,...SITE_DATA.prod].filter(s=>!s.urgent&&s.deadline!=='확인중').slice(0,3);
+  recent.forEach(s=>{
+    const dlTag = `<span class="tag t-wait" style="font-size:9px">${s.deadline}</span>`;
+    html+=`<tr>
+      <td style="font-weight:600;max-width:140px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${s.company} ${s.name}</td>
+      <td><span class="ctag ${regionClass(s.region)}">${s.flag||''} ${s.region}</span></td>
+      <td>${dlTag}</td>
+      <td><span style="font-size:10px;color:var(--dim)">${s.deadline||'—'}</span></td>
+      <td style="font-size:10px;color:var(--dim);max-width:160px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${(s.note||'').substring(0,40)}</td>
+    </tr>`;
+  });
+  tbody.innerHTML=html||'<tr><td colspan="5" style="text-align:center;color:var(--dim);padding:16px">긴급/주의 현황 없음</td></tr>';
+}
+
+function renderCorpList(){
+  const list = document.getElementById('corp-list');
+  if(!list) return;
+  const allActive = [...SITE_DATA.plan,...SITE_DATA.prod];
+  const corpMap = {};
+  allActive.forEach(s=>{
+    const k = s.region.includes('KKI')||s.region==='인도' ? 'KKI(인도)' :
+              s.region.includes('케냐') ? '케냐' :
+              s.region.includes('브라질') ? '브라질' :
+              s.region.includes('사우디') ? '사우디' :
+              s.region.includes('두바이') ? '두바이' : '기타';
+    if(!corpMap[k]) corpMap[k]={count:0,area:0};
+    corpMap[k].count++;
+    corpMap[k].area+=(s.area||0);
+  });
+  const maxCount = Math.max(...Object.values(corpMap).map(v=>v.count))||1;
+  const colors={'KKI(인도)':'#ea580c','케냐':'#059669','브라질':'#2563eb','사우디':'#7c3aed','두바이':'#0d9488','기타':'#d97706'};
+  let html='';
+  Object.entries(corpMap).sort((a,b)=>b[1].count-a[1].count).forEach(([k,v])=>{
+    const color=colors[k]||'#64748b';
+    html+=`<div class="exp-row">
+      <div class="exp-country" style="color:${color}">${k}</div>
+      <div>
+        <div class="exp-bar-wrap"><div class="exp-bar-fill" style="width:${v.count/maxCount*100}%;background:${color}"></div></div>
+        <div style="font-size:9px;color:var(--dim);margin-top:1px">${v.area.toLocaleString()} m²</div>
+      </div>
+      <div class="exp-cnt">${v.count}건</div>
+      <div class="exp-wt" style="color:${color}">${v.count}현장</div>
+    </div>`;
+  });
+  list.innerHTML=html||'<div class="empty-state">데이터 없음</div>';
+}
+
+function renderExportCountryList(){
+  const list = document.getElementById('export-country-list');
+  if(!list) return;
+  const data = EXPORT_DATA.rows.filter(r=>r.m4w+r.m5w+r.m6pw>0);
+  const maxWt = Math.max(...data.map(r=>r.m4w+r.m5w+r.m6pw))||1;
+  const colors={'인도':'#ea580c','사우디':'#7c3aed','브라질':'#2563eb','케냐':'#059669','두바이':'#0d9488','북사이프러스':'#0891b2','트리니다드토바고':'#d97706'};
+  let html='';
+  data.sort((a,b)=>(b.m4w+b.m5w+b.m6pw)-(a.m4w+a.m5w+a.m6pw)).forEach(r=>{
+    const total=r.m4w+r.m5w+r.m6pw;
+    const cnt=r.m4+r.m5+r.m6p;
+    const color=colors[r.country]||'#64748b';
+    html+=`<div class="exp-row">
+      <div class="exp-country" style="color:${color}">${r.country}</div>
+      <div>
+        <div class="exp-bar-wrap"><div class="exp-bar-fill" style="width:${total/maxWt*100}%;background:${color}"></div></div>
+        <div style="font-size:9px;color:var(--dim);margin-top:1px">4월:${r.m4w}t · 5월:${r.m5w}t · 6월↑:${r.m6pw}t</div>
+      </div>
+      <div class="exp-cnt">${cnt}건</div>
+      <div class="exp-wt" style="color:${color}">${total}t</div>
+    </div>`;
+  });
+  list.innerHTML=html||'<div class="empty-state">수출 데이터 없음</div>';
+}
+
+/* ═══════════════════════════════════════════
+   TAB 2 RENDER: 차트
+═══════════════════════════════════════════ */
+let chartsRendered=false;
+function renderCharts(){
+  if(chartsRendered) return;
+  if(typeof Chart==='undefined'){setTimeout(renderCharts,300);return;}
+  chartsRendered=true;
+  renderExportChart();
+  renderMonthlyChart();
+  renderStatusChart();
+  renderCorpChart();
+}
+
+function renderExportChart(){
+  const ctx=document.getElementById('exportChart');
+  if(!ctx) return;
+  const labels=['3월','4월','5월','6월이후'];
+  const byCountry=[
+    {label:'인도',color:'#ea580c',data:[0,99,0,413]},
+    {label:'사우디',color:'#7c3aed',data:[0,92,133,456]},
+    {label:'브라질',color:'#2563eb',data:[0,59,0,38]},
+    {label:'케냐',color:'#059669',data:[0,0,0,59]},
+    {label:'두바이',color:'#0d9488',data:[0,0,0,67]},
+    {label:'기타',color:'#d97706',data:[0,0,14,26]},
+  ];
+  new Chart(ctx,{type:'bar',data:{labels,datasets:byCountry.map(d=>({label:d.label,data:d.data,backgroundColor:d.color+'cc',borderColor:d.color,borderWidth:1,borderRadius:3}))},
+    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{font:{size:10},boxWidth:10}}},
+      scales:{x:{stacked:true,ticks:{font:{size:10}}},y:{stacked:true,ticks:{font:{size:10}},title:{display:true,text:'ton',font:{size:10}}}}}});
+}
+
+function renderMonthlyChart(){
+  const ctx=document.getElementById('monthlyChart');
+  if(!ctx) return;
+  const labels=['3월','4월','5월','6월이후'];
+  const counts=[0,6,3,12];
+  const weights=[0,250,147,1059];
+  new Chart(ctx,{type:'bar',data:{labels,
+    datasets:[
+      {label:'건수',data:counts,backgroundColor:'#3b82f6aa',borderColor:'#2563eb',borderWidth:1,borderRadius:3,yAxisID:'y1'},
+      {label:'중량(ton)',data:weights,backgroundColor:'#059669aa',borderColor:'#059669',borderWidth:1,borderRadius:3,yAxisID:'y2'},
+    ]},
+    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{font:{size:10},boxWidth:10}}},
+      scales:{
+        x:{ticks:{font:{size:10}}},
+        y1:{type:'linear',position:'left',ticks:{font:{size:10}},title:{display:true,text:'건',font:{size:10}}},
+        y2:{type:'linear',position:'right',ticks:{font:{size:10}},title:{display:true,text:'ton',font:{size:10}},grid:{drawOnChartArea:false}}
+      }}});
+}
+
+function renderStatusChart(){
+  const ctx=document.getElementById('statusChart');
+  const legend=document.getElementById('status-legend');
+  if(!ctx||!legend) return;
+  const data=[
+    {label:'플랜 진행중',val:SITE_DATA.plan.length,color:'#3b82f6'},
+    {label:'제작도 진행중',val:SITE_DATA.prod.length,color:'#059669'},
+    {label:'설계 보류',val:SITE_DATA.hold.length,color:'#ea580c'},
+    {label:'SHELL 작업중',val:SITE_DATA.shell.length,color:'#7c3aed'},
+    {label:'설계 예정',val:SITE_DATA.pending.length,color:'#d97706'},
+  ];
+  new Chart(ctx,{type:'doughnut',data:{labels:data.map(d=>d.label),datasets:[{data:data.map(d=>d.val),backgroundColor:data.map(d=>d.color+'cc'),borderColor:data.map(d=>d.color),borderWidth:1.5}]},
+    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}}}});
+  legend.innerHTML=data.map(d=>`<div style="display:flex;align-items:center;gap:6px;font-size:10px;color:var(--dim)"><div style="width:8px;height:8px;border-radius:50%;background:${d.color};flex-shrink:0"></div>${d.label}<span style="font-family:'JetBrains Mono',monospace;color:var(--text);margin-left:auto;font-weight:600">${d.val}건</span></div>`).join('');
+}
+
+function renderCorpChart(){
+  const ctx=document.getElementById('corpChart');
+  const legend=document.getElementById('corp-legend');
+  if(!ctx||!legend) return;
+  const allSites=[...SITE_DATA.plan,...SITE_DATA.prod,...SITE_DATA.hold,...SITE_DATA.shell,...SITE_DATA.pending];
+  const corpMap={};
+  allSites.forEach(s=>{
+    const k=s.region.includes('KKI')||s.region==='인도'?'KKI(인도)':
+             s.region.includes('케냐')?'케냐':
+             s.region.includes('브라질')?'브라질':
+             s.region.includes('사우디')?'사우디':
+             s.region.includes('두바이')?'두바이':'기타';
+    corpMap[k]=(corpMap[k]||0)+1;
+  });
+  const colors={'KKI(인도)':'#ea580c','케냐':'#059669','브라질':'#2563eb','사우디':'#7c3aed','두바이':'#0d9488','기타':'#d97706'};
+  const entries=Object.entries(corpMap).sort((a,b)=>b[1]-a[1]);
+  new Chart(ctx,{type:'doughnut',data:{labels:entries.map(e=>e[0]),datasets:[{data:entries.map(e=>e[1]),backgroundColor:entries.map(e=>(colors[e[0]]||'#64748b')+'cc'),borderColor:entries.map(e=>colors[e[0]]||'#64748b'),borderWidth:1.5}]},
+    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}}}});
+  legend.innerHTML=entries.map(([k,v])=>`<div style="display:flex;align-items:center;gap:6px;font-size:10px;color:var(--dim)"><div style="width:8px;height:8px;border-radius:50%;background:${colors[k]||'#64748b'};flex-shrink:0"></div>${k}<span style="font-family:'JetBrains Mono',monospace;color:var(--text);margin-left:auto;font-weight:600">${v}건</span></div>`).join('');
+}
+
+/* ═══════════════════════════════════════════
+   L2: 진행중 현장 목록
+═══════════════════════════════════════════ */
+function openL2(){_slideOpen('l2');}
+function closeL2(){history.back();}
+
+function buildL2(){
+  const planGrid=document.getElementById('l2-plan-grid');
+  const prodGrid=document.getElementById('l2-prod-grid');
+  if(!planGrid||!prodGrid) return;
+
+  function makeCard(s, typeKey){
+    const hasPD=PD[s.id];
+    const cls=typeKey==='plan'?'s-plan':'s-prod';
+    const tag=typeKey==='plan'?'<span class="tag t-plan">플랜</span>':'<span class="tag t-prod">제작도</span>';
+    const dl=s.deadline&&s.deadline!=='—'?`<span class="tag ${s.urgent?'t-urg':'t-wait'}" style="font-size:9px">${s.urgent?'⚡긴급':s.deadline}</span>`:'';
+    const client=s.client&&s.client!=='—'?`<span class="tag t-kkv">${s.client}</span>`:'';
+    const area=s.area?s.area.toLocaleString()+' m²':'—';
+    const wt=s.weight?s.weight.toFixed(1)+' t':'—';
+    const click=hasPD?`onclick="openL3('${s.id}')"`:'' ;
+    return `<div class="proj-card ${cls}" ${click}>
+      <div class="pc-top">${tag}<span class="ctag ${regionClass(s.region)}">${s.flag||''} ${s.region}</span></div>
+      <div class="pc-name">${s.company} ${s.name}</div>
+      <div class="pc-meta"><span class="pc-area">${area} · ${wt}</span>${dl}${client}</div>
+      ${hasPD?'<span class="pc-arrow">→</span>':''}
+    </div>`;
+  }
+
+  planGrid.innerHTML = SITE_DATA.plan.map(s=>makeCard(s,'plan')).join('');
+  prodGrid.innerHTML = SITE_DATA.prod.map(s=>makeCard(s,'prod')).join('');
+
+  const planArea=SITE_DATA.plan.reduce((a,s)=>a+(s.area||0),0);
+  const prodArea=SITE_DATA.prod.reduce((a,s)=>a+(s.area||0),0);
+  const planWt=SITE_DATA.plan.reduce((a,s)=>a+(s.weight||0),0);
+  const prodWt=SITE_DATA.prod.reduce((a,s)=>a+(s.weight||0),0);
+  document.getElementById('l2-plan').textContent=SITE_DATA.plan.length;
+  document.getElementById('l2-prod').textContent=SITE_DATA.prod.length;
+  document.getElementById('l2-plan-area').textContent=planArea.toLocaleString()+' m²';
+  document.getElementById('l2-prod-area').textContent=prodArea.toLocaleString()+' m²';
+  document.getElementById('l2-total-area').textContent=(planArea+prodArea).toLocaleString();
+  document.getElementById('l2-total-wt').textContent=(planWt+prodWt).toFixed(1);
+}
+
+/* ═══════════════════════════════════════════
+   L3: 현장 상세
+═══════════════════════════════════════════ */
+function openL3(id){
+  const p=PD[id]; if(!p) return;
+  document.getElementById('l3-title').textContent=p.title;
+  document.getElementById('l3-sub').textContent=p.sub;
+  const kpiHTML=p.kpis.map(k=>`<div class="d-kpi"><div class="d-kv" style="color:${k.c}">${k.v}</div><div class="d-kl">${k.l}</div></div>`).join('');
+  const infoRows=Object.entries(p.info).map(([k,v])=>`<tr><td class="ik">${k}</td><td class="iv">${v}</td></tr>`).join('');
+  const designerHTML=p.designers.map(d=>`<div class="designer-card"><div class="av" style="background:${d.color}">${d.av}</div><div style="flex:1"><div style="display:flex;align-items:center;gap:7px;margin-bottom:2px"><div class="av-name">${d.name}</div><span style="font-size:9px;background:var(--light);border:1px solid var(--border);padding:1px 6px;border-radius:4px;color:var(--dim)">${d.role}</span></div><div class="av-task">${d.task}</div></div></div>`).join('');
+  const tlHTML=p.tl.map((t,i)=>`<div class="tl-item"><div class="tl-dot" style="background:${t.c}">${i+1}</div><div style="flex:1"><div class="tl-t">${t.t}</div><div class="tl-m">${t.m}</div><div class="tl-n">${t.n}</div>${t.who&&t.who!=='-'?`<div style="margin-top:4px;display:inline-flex;align-items:center;gap:4px;font-size:10px;color:var(--accent2);background:var(--light);border:1px solid var(--border);padding:2px 7px;border-radius:4px">👤 ${t.who}</div>`:''}</div></div>`).join('');
+  document.getElementById('l3-body').innerHTML=`<div class="d-kpi-row">${kpiHTML}</div><div class="d-grid"><div class="d-panel"><div class="d-ph">📋 기본 정보</div><div class="d-pb"><table class="info-tbl">${infoRows}</table></div></div><div class="d-panel"><div class="d-ph">👥 담당 설계자</div><div class="d-pb">${designerHTML}</div></div></div><div class="d-full"><div class="d-panel"><div class="d-ph">🕐 진행 타임라인</div><div class="d-pb"><div class="tl">${tlHTML}</div></div></div></div>`;
+  _slideOpen('l3');
+}
+function closeL3(){history.back();}
+
+/* ═══════════════════════════════════════════
+   MEMBER SLIDE
+═══════════════════════════════════════════ */
+function openMember(name){
+  const m=MEMBERS[name]; if(!m) return;
+  document.getElementById('member-title').textContent=name+' — '+m.role;
+  const statusColor=m.status==='재직'?'var(--green)':m.status.includes('출장')?'var(--yellow)':'var(--red)';
+  const allProj=[...SITE_DATA.plan,...SITE_DATA.prod];
+  const projList=m.projects.map(pid=>allProj.find(s=>s.id===pid)).filter(Boolean);
+  const statsHTML=`<div class="m-stat"><div class="m-stat-v" style="color:#3b82f6">${projList.filter(p=>SITE_DATA.plan.includes(p)).length}</div><div class="m-stat-l">플랜</div></div><div class="m-stat"><div class="m-stat-v" style="color:var(--green)">${projList.filter(p=>SITE_DATA.prod.includes(p)).length}</div><div class="m-stat-l">제작도</div></div><div class="m-stat"><div class="m-stat-v" style="color:var(--accent)">${projList.length}</div><div class="m-stat-l">총 현장</div></div>`;
+  const projHTML=projList.map(s=>{
+    const isPlan=SITE_DATA.plan.includes(s);
+    const tagCls=isPlan?'t-plan':'t-prod';
+    const tagLbl=isPlan?'플랜':'제작도';
+    const color=isPlan?'#3b82f6':'#059669';
+    const pdItem=PD[s.id];
+    return `<div class="member-proj-card" style="border-left-color:${color}">
+      <div class="mpc-top"><span class="tag ${tagCls}">${tagLbl}</span></div>
+      <div class="mpc-name">${s.company} ${s.name}</div>
+      <div class="mpc-meta"><span>📐 ${s.area?s.area.toLocaleString()+' m²':'—'}</span><span>🗓️ 납기: <strong style="color:var(--yellow)">${s.deadline||'확인중'}</strong></span></div>
+      ${pdItem?`<button onclick="openL3('${s.id}')" style="margin-top:8px;width:100%;background:var(--light);border:1px solid var(--border);color:var(--accent2);padding:5px;border-radius:6px;cursor:pointer;font-size:11px;font-weight:600;font-family:inherit">🔍 현장 상세 →</button>`:''}
+    </div>`;
+  }).join('');
+  document.getElementById('member-body').innerHTML=`<div style="display:flex;align-items:center;gap:14px;margin-bottom:14px;padding:14px 16px;background:var(--card);border:1px solid var(--border);border-radius:10px;border-left:4px solid ${m.color}"><div class="member-av-big" style="background:${m.color}">${m.av}</div><div style="flex:1"><div style="display:flex;align-items:center;gap:8px;margin-bottom:4px;flex-wrap:wrap"><div style="font-size:15px;font-weight:700">${name}</div><span style="font-size:11px;background:var(--light);border:1px solid var(--border);padding:2px 8px;border-radius:5px;color:var(--dim)">${m.role}</span><span style="font-size:11px;font-weight:600;color:${statusColor}">● ${m.status}</span></div><div style="font-size:11px;color:var(--dim)">${m.summary}</div></div></div><div style="display:flex;gap:8px;margin-bottom:14px">${statsHTML}</div><div style="font-size:11px;color:var(--dim);text-transform:uppercase;letter-spacing:1px;margin-bottom:10px;border-bottom:1px solid var(--border);padding-bottom:8px">담당 현장 (${projList.length}건)</div>${projHTML||'<div style="text-align:center;color:var(--dim);padding:20px;font-size:12px">현재 진행중 현장 없음</div>'}`;
+  _slideOpen('member-slide');
+}
+
+
+/* ═══════════════════════════════════════════
+   CUMULATIVE MANAGEMENT (localStorage)
+═══════════════════════════════════════════ */
+const HIST_KEY='kkm_design_hist_v9';
+const COMP_KEY='kkm_design_comp_v9';
+
+function getHistory(){try{return JSON.parse(localStorage.getItem(HIST_KEY)||'[]')}catch{return[]}}
+function setHistory(h){localStorage.setItem(HIST_KEY,JSON.stringify(h))}
+function getCompleted(){try{return JSON.parse(localStorage.getItem(COMP_KEY)||'[]')}catch{return[]}}
+function setCompleted(c){localStorage.setItem(COMP_KEY,JSON.stringify(c))}
+
+function updateCumBadge(){
+  const h=getHistory();
+  const badge=document.getElementById('cum-count-badge');
+  if(h.length>0){badge.textContent=h.length+'건';badge.style.display='inline'}
+  else{badge.style.display='none'}
+}
+updateCumBadge();
+
+function updateCompTabBadge(){
+  const c=getCompleted();
+  const b=document.getElementById('ctab-comp-count');
+  if(b) b.textContent=c.length>0?c.length:'';
+}
+updateCompTabBadge();
+
+function openCumulative(){_slideOpen('cum-slide');renderCumTab('week');}
+function closeCumulative(){history.back();}
+
+let currentCumTab='week';
+function switchCumTab(tab){
+  currentCumTab=tab;
+  ['week','month','year','member','complete'].forEach(t=>{
+    const el=document.getElementById('ctab-'+t);
+    if(el)el.classList.toggle('active',t===tab);
+  });
+  renderCumTab(tab);
+}
+
+function renderCumTab(tab){
+  const hist=getHistory();
+  const body=document.getElementById('cum-body');
+  if(tab==='complete'){renderCompleteTab(body);return;}
+  if(hist.length===0&&tab!=='member'){
+    body.innerHTML=`<div style="text-align:center;padding:50px 20px;color:var(--dim);background:var(--card);border:1px solid var(--border);border-radius:10px"><div style="font-size:36px;margin-bottom:12px">📂</div><div style="font-size:14px;font-weight:600;margin-bottom:6px">업로드 기록이 없습니다</div><div style="font-size:12px">엑셀 파일을 업로드하면 누적 데이터가 자동으로 쌓입니다</div></div>`;
+    return;
+  }
+  if(tab==='week') renderWeekTab(hist,body);
+  else if(tab==='month') renderMonthTab(hist,body);
+  else if(tab==='year') renderYearTab(hist,body);
+  else if(tab==='member') renderMemberCumTab(hist,body);
+}
+
+function renderWeekTab(hist,body){
+  const sorted=[...hist].sort((a,b)=>b.ts-a.ts);
+  let html=`<div style="margin-bottom:10px;font-size:11px;color:var(--dim)">총 <strong style="color:var(--text)">${hist.length}건</strong>의 주간 기록</div>`;
+  sorted.forEach((entry,idx)=>{
+    const d=new Date(entry.ts);
+    const dateStr=`${d.getFullYear()}.${String(d.getMonth()+1).padStart(2,'0')}.${String(d.getDate()).padStart(2,'0')}`;
+    const timeStr=`${String(d.getHours()).padStart(2,'0')}:${String(d.getMinutes()).padStart(2,'0')}`;
+    const prev=sorted[idx+1];
+    const diffPlan=prev?(entry.planCount||0)-(prev.planCount||0):0;
+    const diffProd=prev?(entry.prodCount||0)-(prev.prodCount||0):0;
+    const changesTags=(entry.changes||[]).map(c=>{const cls=c.type==='add'?'ct-add':c.type==='del'?'ct-del':c.type==='mod'?'ct-mod':'ct-inf';return`<span class="change-tag ${cls}">${c.type==='add'?'➕':c.type==='del'?'➖':c.type==='mod'?'✏️':'ℹ️'} ${c.label}</span>`}).join(' ');
+    html+=`<div class="history-entry"><div style="flex-shrink:0;min-width:140px"><div class="he-date">📅 ${dateStr} <span style="font-size:10px;color:var(--dim)">${timeStr}</span></div><div style="font-size:10px;color:var(--dim);margin-top:1px">${entry.filename||'—'}</div><div style="font-size:10px;color:var(--dim)">${entry.refDate||''}</div></div><div style="flex:1;display:flex;flex-wrap:wrap;gap:8px"><div class="he-stat">플랜 <strong style="color:#3b82f6">${entry.planCount||0}건</strong>${diffPlan!==0?`<span style="font-size:9px;color:${diffPlan>0?'var(--green)':'var(--red)'}">(${diffPlan>0?'+':''}${diffPlan})</span>`:''}</div><div class="he-stat">제작도 <strong style="color:var(--green)">${entry.prodCount||0}건</strong>${diffProd!==0?`<span style="font-size:9px;color:${diffProd>0?'var(--green)':'var(--red)'}">(${diffProd>0?'+':''}${diffProd})</span>`:''}</div><div class="he-stat">대기 <strong style="color:var(--yellow)">${entry.waitCount||0}건</strong></div><div class="he-stat">보류 <strong style="color:var(--orange)">${entry.holdCount||0}건</strong></div><div class="he-stat">면적 <strong style="color:var(--accent2)">${(entry.totalArea||0).toLocaleString()} m²</strong></div>${changesTags?`<div style="display:flex;gap:4px;flex-wrap:wrap">${changesTags}</div>`:''}</div></div>`;
+  });
+  body.innerHTML=html;
+}
+
+function renderMonthTab(hist,body){
+  const monthly={};
+  hist.forEach(entry=>{
+    const d=new Date(entry.ts);
+    const key=`${d.getFullYear()}.${String(d.getMonth()+1).padStart(2,'0')}`;
+    if(!monthly[key]){monthly[key]={entries:[],latest:null};}
+    monthly[key].entries.push(entry);
+    if(!monthly[key].latest||entry.ts>monthly[key].latest.ts) monthly[key].latest=entry;
+  });
+  let html='';
+  Object.keys(monthly).sort().reverse().forEach(k=>{
+    const e=monthly[k].latest;
+    html+=`<div class="history-entry"><div style="font-size:13px;font-weight:700;color:var(--accent2);min-width:80px">${k}</div><div style="display:flex;flex-wrap:wrap;gap:8px;flex:1"><div class="he-stat">플랜 <strong style="color:#3b82f6">${e.planCount||0}건</strong></div><div class="he-stat">제작도 <strong style="color:var(--green)">${e.prodCount||0}건</strong></div><div class="he-stat">면적 <strong style="color:var(--accent2)">${(e.totalArea||0).toLocaleString()} m²</strong></div><div class="he-stat">업로드 ${monthly[k].entries.length}회</div></div></div>`;
+  });
+  body.innerHTML=html||'<div style="text-align:center;color:var(--dim);padding:30px">기록 없음</div>';
+}
+
+function renderYearTab(hist,body){
+  const yearly={};
+  hist.forEach(entry=>{
+    const y=new Date(entry.ts).getFullYear();
+    if(!yearly[y]){yearly[y]={count:0,maxPlan:0,maxProd:0,maxArea:0};}
+    yearly[y].count++;
+    yearly[y].maxPlan=Math.max(yearly[y].maxPlan,entry.planCount||0);
+    yearly[y].maxProd=Math.max(yearly[y].maxProd,entry.prodCount||0);
+    yearly[y].maxArea=Math.max(yearly[y].maxArea,entry.totalArea||0);
+  });
+  let html='';
+  Object.keys(yearly).sort().reverse().forEach(y=>{
+    const v=yearly[y];
+    html+=`<div class="history-entry"><div style="font-size:16px;font-weight:700;color:var(--accent2);min-width:60px">${y}</div><div style="display:flex;flex-wrap:wrap;gap:8px;flex:1"><div class="he-stat">업로드 ${v.count}회</div><div class="he-stat">최대플랜 <strong style="color:#3b82f6">${v.maxPlan}건</strong></div><div class="he-stat">최대제작도 <strong style="color:var(--green)">${v.maxProd}건</strong></div><div class="he-stat">최대면적 <strong style="color:var(--accent2)">${v.maxArea.toLocaleString()} m²</strong></div></div></div>`;
+  });
+  body.innerHTML=html||'<div style="text-align:center;color:var(--dim);padding:30px">기록 없음</div>';
+}
+
+function renderMemberCumTab(hist,body){
+  // 팀원별 통계: 최신 스냅샷 기준
+  const latest=hist.length>0?hist.reduce((a,b)=>a.ts>b.ts?a:b):null;
+  let html='';
+  Object.entries(MEMBERS).forEach(([name,m])=>{
+    const statusColor=m.status==='재직'?'var(--green)':m.status.includes('출장')?'var(--yellow)':'var(--red)';
+    const allProj=[...SITE_DATA.plan,...SITE_DATA.prod];
+    const myProj=m.projects.map(pid=>allProj.find(s=>s.id===pid)).filter(Boolean);
+    html+=`<div class="history-entry"><div style="display:flex;align-items:center;gap:10px;min-width:130px"><div style="width:32px;height:32px;border-radius:50%;background:${m.color};display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:#fff">${m.av}</div><div><div style="font-size:13px;font-weight:700">${name}</div><div style="font-size:10px;color:${statusColor}">${m.status}</div></div></div><div style="flex:1;font-size:11px;color:var(--dim)">${m.summary}</div><div style="font-family:'JetBrains Mono',monospace;font-size:14px;font-weight:700;color:${m.color}">${myProj.length}건</div></div>`;
+  });
+  body.innerHTML=html||'<div style="text-align:center;color:var(--dim);padding:30px">기록 없음</div>';
+}
+
+function renderCompleteTab(body){
+  const comp=getCompleted();
+  updateCompTabBadge();
+  if(comp.length===0){
+    body.innerHTML=`<div style="text-align:center;padding:50px;color:var(--dim);background:var(--card);border:1px solid var(--border);border-radius:10px"><div style="font-size:36px;margin-bottom:12px">🏁</div><div style="font-size:14px;font-weight:600;margin-bottom:6px">완료된 현장이 없습니다</div><div style="font-size:12px">헤더의 "완료등록" 버튼으로 현장을 등록하세요</div></div>`;
+    return;
+  }
+  let html='';
+  comp.forEach((c,i)=>{
+    const ontime=c.ontime||'✅ 준수';
+    const color=ontime.includes('조기')?'var(--green)':ontime.includes('지연')?'var(--red)':'var(--text)';
+    html+=`<div class="comp-card"><div class="comp-card-top"><div style="font-size:13px;font-weight:700">${c.name||'—'}</div><span style="font-size:11px;font-weight:600;color:${color}">${ontime}</span></div><div class="comp-meta"><span>📍 ${c.region||'—'}</span> · <span>📐 ${c.area?c.area.toLocaleString()+' m²':'—'}</span> · <span>⚖️ ${c.weight?c.weight+' t':'—'}</span> · <span>👤 ${c.main||'—'}</span> · <span>✅ ${c.completed||'—'}</span></div>${c.note?`<div style="font-size:11px;color:var(--dim);margin-top:5px;padding:5px 8px;background:var(--light);border-radius:5px;border:1px solid var(--border)">${c.note}</div>`:''}<button onclick="deleteComp(${i})" style="margin-top:8px;background:#fef2f2;border:1px solid #fecaca;color:var(--red);padding:3px 10px;border-radius:5px;cursor:pointer;font-size:10px;font-family:inherit">삭제</button></div>`;
+  });
+  body.innerHTML=html;
+}
+
+function deleteComp(idx){
+  const comp=getCompleted();
+  comp.splice(idx,1);
+  setCompleted(comp);
+  renderCompleteTab(document.getElementById('cum-body'));
+  updateCompTabBadge();
+}
+
+function exportCumCSV(){
+  const hist=getHistory();
+  if(!hist.length){showToast('내보낼 기록이 없습니다');return;}
+  const rows=[['날짜','파일명','플랜','제작도','대기','보류','면적(m²)']];
+  hist.forEach(h=>{
+    const d=new Date(h.ts);
+    rows.push([`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`,h.filename||'',h.planCount||0,h.prodCount||0,h.waitCount||0,h.holdCount||0,h.totalArea||0]);
+  });
+  const csv='\uFEFF'+rows.map(r=>r.join(',')).join('\n');
+  const a=document.createElement('a');
+  a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv'}));
+  a.download='kkm_설계현황_누적_'+Date.now()+'.csv';
+  a.click();
+}
+
+function clearAllHistory(){
+  if(!confirm('모든 누적 기록을 삭제하시겠습니까?')) return;
+  localStorage.removeItem(HIST_KEY);
+  renderCumTab('week');
+  updateCumBadge();
+  showToast('기록이 초기화되었습니다');
+}
+
+/* ═══════════════════════════════════════════
+   COMPLETE MODAL
+═══════════════════════════════════════════ */
+function openCompModal(){document.getElementById('comp-modal').classList.add('open');}
+function closeCompModal(){document.getElementById('comp-modal').classList.remove('open');}
+function saveCompletedSite(){
+  const name=document.getElementById('cf-name').value.trim();
+  if(!name){showToast('현장명을 입력하세요');return;}
+  const comp=getCompleted();
+  comp.unshift({
+    name,
+    region:document.getElementById('cf-region').value,
+    type:document.getElementById('cf-type').value,
+    area:parseFloat(document.getElementById('cf-area').value)||null,
+    weight:parseFloat(document.getElementById('cf-weight').value)||null,
+    alu:parseFloat(document.getElementById('cf-alu').value)||null,
+    main:document.getElementById('cf-main').value,
+    completed:document.getElementById('cf-completed').value,
+    client:document.getElementById('cf-client').value,
+    ontime:document.getElementById('cf-ontime').value,
+    note:document.getElementById('cf-note').value,
+    ts:Date.now()
+  });
+  setCompleted(comp);
+  updateCompTabBadge();
+  closeCompModal();
+  showToast('✅ 완료 현장이 등록되었습니다');
+  ['cf-name','cf-region','cf-type','cf-area','cf-weight','cf-alu','cf-main','cf-completed','cf-client','cf-ontime','cf-note'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
+}
+
+/* ═══════════════════════════════════════════
+   EXCEL UPLOAD
+═══════════════════════════════════════════ */
+let pendingUpdate=null;
+function handleUpload(input){
+  const file=input.files[0]; if(!file) return;
+  if(typeof XLSX==='undefined'){showToast('SheetJS 로딩중... 잠시 후 다시 시도하세요');return;}
+  const reader=new FileReader();
+  reader.onload=function(e){
+    try{
+      const wb=XLSX.read(e.target.result,{type:'array',cellDates:true});
+      const snap=parseExcel(wb,file.name);
+      previewUpdate(snap,file.name);
+    }catch(err){showToast('파일 파싱 오류: '+err.message);}
+  };
+  reader.readAsArrayBuffer(file);
+  input.value='';
+}
+
+function parseExcel(wb,fname){
+  const snap={
+    filename:fname, ts:Date.now(), refDate:'',
+    planCount:0, prodCount:0, holdCount:0, waitCount:0,
+    totalArea:0, totalWeight:0,
+    sites:[], members:{}, monthlyData:null, exportData:null,
+    changes:[]
+  };
+
+  /* ── 1. 현장 현황 시트 파싱 (20210122) ── */
+  const sheetName = wb.SheetNames.find(s=>s.includes('2021')||s.includes('KKV')) || wb.SheetNames[0];
+  const ws = wb.Sheets[sheetName];
+  const rows = XLSX.utils.sheet_to_json(ws,{header:1,defval:null,raw:false});
+
+  // 기준일 추출
+  for(let i=0;i<5;i++){
+    const row=rows[i]||[];
+    for(const cell of row){
+      if(cell&&typeof cell==='string'&&cell.match(/\d{4}\.\s*\d+\.\s*\d+/)){
+        snap.refDate=cell.trim(); break;
+      }
+    }
+    if(snap.refDate) break;
+  }
+
+  let currentType='';
+  let currentSubType=''; // SHELL작업중 / 도면미접수 / 예정 등
+
+  rows.forEach(row=>{
+    if(!row) return;
+    const col0 = row[0]?String(row[0]).trim():'';
+    const col1 = row[1]?String(row[1]).trim():'';
+
+    // 섹션 구분
+    if(col0.includes('플랜 진행중'))           { currentType='plan';  return; }
+    if(col0.includes('제작도 진행중'))          { currentType='prod';  return; }
+    if(col0.includes('설계보류')||col0.includes('설계 보류')) { currentType='hold'; return; }
+    if(col0.includes('설계 대기'))              { currentType='wait';  currentSubType='확정대기'; return; }
+    if(col0.includes('설계 진행중 합계')||col0.includes('합  계')) return;
+    if(col0.includes('취소')) return;
+    if(col1.includes('SHELL 작업중'))           { currentSubType='shell'; return; }
+    if(col1.includes('도면 미 접수')||col1.includes('도면미접수')||col1.includes('층변화 대기')||col1.includes('견적')||col1.includes('예정')) {
+      currentSubType='pending'; return;
+    }
+
+    // 소계/헤더 행 스킵
+    if(col1==='소  계'||col1==='확정- 설계 대기'||col0==='유형'||col1==='지역') return;
+
+    // 현장 데이터 행: col1=지역, col2=업체, col3=현장명
+    const region  = col1;
+    const company = row[2]?String(row[2]).trim():'';
+    const siteName= row[3]?String(row[3]).trim():'';
+    const area    = parseFloat(row[4])||null;
+    const weight  = parseFloat(row[5])||null;
+    const recvRaw = row[8];
+    const received= recvRaw&&recvRaw!=='None'?String(recvRaw).substring(0,10):'';
+    const chgRaw  = row[9];
+    const changed = chgRaw&&chgRaw!=='None'?String(chgRaw).substring(0,10):'';
+    const deadline= row[12]?String(row[12]).trim():'—';
+    const client  = row[13]?String(row[13]).trim():'';
+    const note    = row[14]?String(row[14]).trim():'';
+
+    if(!region||region==='소  계'||!company) return;
+    // 특수 서브헤더 행 필터
+    if(region==='SHELL 작업중'||region==='도면 미 접수'||region==='층변화 대기'||region==='견적'||region==='예정') return;
+
+    const urgent = deadline==='긴급'||note.includes('긴급')||note.includes('3월긴급');
+    const flag   = regionFlag(region);
+
+    const site = {
+      company, name:siteName, region, flag,
+      area, weight, client, received, changed,
+      deadline, note, urgent, typeKey:currentType
+    };
+
+    if(currentType==='plan'){
+      snap.planCount++;
+      if(area) snap.totalArea+=area;
+      if(weight) snap.totalWeight+=weight;
+      snap.sites.push({...site, category:'plan'});
+    } else if(currentType==='prod'){
+      snap.prodCount++;
+      if(area) snap.totalArea+=area;
+      if(weight) snap.totalWeight+=weight;
+      snap.sites.push({...site, category:'prod'});
+    } else if(currentType==='hold'){
+      snap.holdCount++;
+      snap.sites.push({...site, category:'hold'});
+    } else if(currentType==='wait'){
+      snap.waitCount++;
+      snap.sites.push({...site, category: currentSubType==='shell'?'shell':'pending'});
+    }
+  });
+
+  /* ── 2. 팀원 업무 파싱 (자료정리 시트) ── */
+  const wsM = wb.Sheets['자료정리'];
+  if(wsM){
+    const mrows = XLSX.utils.sheet_to_json(wsM,{header:1,defval:null,raw:false});
+    let inMemberSection = false;
+    let currentGroup = '';
+    const members = {};
+
+    mrows.forEach(row=>{
+      if(!row) return;
+      const c13 = row[13]?String(row[13]).trim():'';
+      const c14 = row[14]?String(row[14]).trim():'';
+      const c18 = row[18]?String(row[18]).trim():'';
+
+      if(c13==='수출 진행 인원'){ inMemberSection=true; return; }
+      if(!inMemberSection) return;
+      if(c13==='구분'||c14==='MAIN') return; // 헤더행
+
+      // 그룹 헤더 (케냐, 팀장, KKM현장 등)
+      if(c13&&c13!=='본사진행'&&!c14){
+        currentGroup=c13; return;
+      }
+      // 팀원 행: c14에 이름, c18에 업무
+      if(c14&&c14!=='본사진행'&&c18){
+        const name=c14.trim();
+        if(!members[name]) members[name]={name, group:currentGroup, tasks:[]};
+        members[name].tasks.push(c18.trim());
+      }
+      // 본사진행 항목
+      if(c13==='본사진행'||(!c13&&!c14&&row[14])){
+        const task = row[14]?String(row[14]).trim():'';
+        if(task&&!members['__kkm__']) members['__kkm__']={name:'KKM현장',group:'KKM',tasks:[]};
+        if(task&&members['__kkm__']) members['__kkm__'].tasks.push(task);
+      }
+    });
+    snap.members=members;
+  }
+
+  /* ── 3. 월별 설계량 파싱 ── */
+  const wsD = wb.Sheets['월별 설계량'];
+  if(wsD){
+    const drows = XLSX.utils.sheet_to_json(wsD,{header:1,defval:null,raw:false});
+    const months=['1월','2월','3월','4월','5월','6월','7월','8월','9월','10월','11월','12월'];
+    const md={target:{},part5:{},kkv:{},total:{}};
+    drows.forEach(row=>{
+      if(!row||!row[0]) return;
+      const label=String(row[0]).trim();
+      if(label.includes('영업목표')){
+        months.forEach((m,i)=>{ if(row[i+2]) md.target[m]=parseFloat(row[i+2])||0; });
+      } else if(label==='5파트'&&row[1]&&String(row[1]).includes('ALU')){
+        months.forEach((m,i)=>{ if(row[i+2]) md.part5[m]=parseFloat(row[i+2])||0; });
+      } else if(label.includes('KKV(ALU')){
+        months.forEach((m,i)=>{ if(row[i+2]) md.kkv[m]=parseFloat(row[i+2])||0; });
+      } else if(label==='합계'&&row[1]&&String(row[1]).includes('ALU')){
+        months.forEach((m,i)=>{ md.total[m]=parseFloat(row[i+2])||0; });
+      }
+    });
+    snap.monthlyData=md;
+  }
+
+  return snap;
+}
+
+function regionFlag(region){
+  if(!region) return '🌍';
+  const r=region.toString();
+  if(r.includes('KKI')||r==='인도') return '🇮🇳';
+  if(r.includes('KKM')) return '🇲🇾';
+  if(r.includes('KKID')) return '🇮🇩';
+  if(r.includes('케냐')) return '🇰🇪';
+  if(r.includes('에티오피아')) return '🇪🇹';
+  if(r.includes('브라질')) return '🇧🇷';
+  if(r.includes('사우디')) return '🇸🇦';
+  if(r.includes('두바이')||r.includes('UAE')) return '🇦🇪';
+  if(r.includes('가나')) return '🇬🇭';
+  if(r.includes('우크라이나')) return '🇺🇦';
+  if(r.includes('북사이프러스')) return '🇨🇾';
+  if(r.includes('트리니다드')) return '🏝️';
+  if(r.includes('모리셔스')) return '🏝️';
+  if(r.includes('필리핀')) return '🇵🇭';
+  if(r.includes('말레이시아')) return '🇲🇾';
+  if(r.includes('인도네시아')) return '🇮🇩';
+  if(r.includes('몽골')) return '🇲🇳';
+  if(r.includes('사우디')) return '🇸🇦';
+  return '🌍';
+}
+function previewUpdate(snap,fname){
+  const hist=getHistory();
+  const prev=hist.length>0?hist[hist.length-1]:null;
+  const changes=[];
+
+  const newPlan  = snap.sites.filter(s=>s.category==='plan').length;
+  const newProd  = snap.sites.filter(s=>s.category==='prod').length;
+  const newHold  = snap.sites.filter(s=>s.category==='hold').length;
+  const newWait  = snap.sites.filter(s=>s.category==='shell'||s.category==='pending').length;
+
+  if(prev){
+    if(newPlan  !== (prev.planCount||0))  changes.push({type:newPlan>(prev.planCount||0)?'add':'del', label:`플랜 ${newPlan>prev.planCount?'+':''}${newPlan-(prev.planCount||0)}건`});
+    if(newProd  !== (prev.prodCount||0))  changes.push({type:newProd>(prev.prodCount||0)?'add':'del', label:`제작도 ${newProd>prev.prodCount?'+':''}${newProd-(prev.prodCount||0)}건`});
+    if(newHold  !== (prev.holdCount||0))  changes.push({type:'mod', label:`보류 ${newHold-(prev.holdCount||0)>0?'+':''}${newHold-(prev.holdCount||0)}건`});
+    if(newWait  !== (prev.waitCount||0))  changes.push({type:'inf', label:`대기 ${newWait-(prev.waitCount||0)>0?'+':''}${newWait-(prev.waitCount||0)}건`});
+  } else {
+    changes.push({type:'add', label:'최초 업로드 — 전체 현장 반영'});
+  }
+
+  // 팀원 업무 변경 표시
+  const memberCount = Object.keys(snap.members||{}).filter(k=>k!=='__kkm__').length;
+  if(memberCount>0) changes.push({type:'inf', label:`팀원 업무 ${memberCount}명 반영`});
+  if(snap.monthlyData) changes.push({type:'inf', label:'월별 설계량 데이터 반영'});
+
+  snap.changes   = changes;
+  snap.planCount = newPlan;
+  snap.prodCount = newProd;
+  snap.holdCount = newHold;
+  snap.waitCount = newWait;
+  snap.totalArea = snap.sites.filter(s=>s.category==='plan'||s.category==='prod').reduce((a,s)=>a+(s.area||0),0);
+  pendingUpdate  = snap;
+
+  document.getElementById('preview-sub').textContent=`${fname} · 기준일: ${snap.refDate||'미확인'}`;
+
+  const changesHTML=changes.map(c=>{
+    const cls=c.type==='add'?'ct-add':c.type==='del'?'ct-del':c.type==='mod'?'ct-mod':'ct-inf';
+    return`<div class="change-item"><span class="change-tag ${cls}">${c.type==='add'?'➕':c.type==='del'?'➖':c.type==='mod'?'✏️':'ℹ️'} ${c.label}</span></div>`;
+  }).join('');
+
+  const summaryHTML=`<div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:14px">
+    <div style="background:#eff6ff;border:1px solid #bfdbfe;border-radius:7px;padding:9px;text-align:center"><div style="font-size:18px;font-weight:700;color:#1d4ed8;font-family:'JetBrains Mono',monospace">${newPlan}</div><div style="font-size:10px;color:var(--dim)">플랜 진행중</div></div>
+    <div style="background:#f0fdf4;border:1px solid #a7f3d0;border-radius:7px;padding:9px;text-align:center"><div style="font-size:18px;font-weight:700;color:var(--green);font-family:'JetBrains Mono',monospace">${newProd}</div><div style="font-size:10px;color:var(--dim)">제작도 진행중</div></div>
+    <div style="background:#fff7ed;border:1px solid #fed7aa;border-radius:7px;padding:9px;text-align:center"><div style="font-size:18px;font-weight:700;color:var(--orange);font-family:'JetBrains Mono',monospace">${newHold}</div><div style="font-size:10px;color:var(--dim)">설계 보류</div></div>
+    <div style="background:#faf5ff;border:1px solid #e9d5ff;border-radius:7px;padding:9px;text-align:center"><div style="font-size:18px;font-weight:700;color:var(--purple);font-family:'JetBrains Mono',monospace">${newWait}</div><div style="font-size:10px;color:var(--dim)">설계 대기</div></div>
+  </div>
+  <div style="margin-bottom:10px;padding:8px 12px;background:var(--light);border-radius:7px;font-size:11px;color:var(--dim)">
+    📋 현장 총 ${snap.sites.length}건 파싱 완료 · 팀원 업무 ${memberCount}명 · 총 면적 ${snap.totalArea.toLocaleString()} m²
+  </div>`;
+
+  // 현장 목록 미리보기
+  const sitePreview = snap.sites.slice(0,8).map(s=>{
+    const catTag = s.category==='plan'?'<span class="tag t-plan" style="font-size:9px">플랜</span>':
+                   s.category==='prod'?'<span class="tag t-prod" style="font-size:9px">제작도</span>':
+                   s.category==='hold'?'<span class="tag t-hold" style="font-size:9px">보류</span>':
+                   '<span class="tag t-shell" style="font-size:9px">대기</span>';
+    return`<div style="display:flex;align-items:center;gap:7px;padding:5px 8px;background:var(--light);border-radius:5px;margin-bottom:3px;font-size:11px">${catTag}<span style="flex:1;font-weight:500">${s.company} ${s.name}</span><span style="color:var(--dim);font-size:10px">${s.area?s.area.toLocaleString()+' m²':'—'}</span></div>`;
+  }).join('');
+  const moreCount = snap.sites.length - 8;
+
+  document.getElementById('preview-changes').innerHTML =
+    summaryHTML +
+    (changesHTML?`<div style="margin-bottom:8px;font-size:11px;font-weight:600;color:var(--dim)">변경사항</div>${changesHTML}`:'') +
+    `<div style="margin-top:12px;margin-bottom:6px;font-size:11px;font-weight:600;color:var(--dim)">파싱된 현장 목록 (상위 8건)</div>` +
+    sitePreview +
+    (moreCount>0?`<div style="font-size:10px;color:var(--dim);text-align:center;padding:5px">외 ${moreCount}건...</div>`:'');
+
+  document.getElementById('preview-modal').classList.add('open');
+}
+function applyUpdate(){
+  if(!pendingUpdate) return;
+  const snap = pendingUpdate;
+
+  /* ── 현장 데이터 → SITE_DATA 전체 교체 ── */
+  if(snap.sites && snap.sites.length > 0){
+    SITE_DATA.plan    = snap.sites.filter(s=>s.category==='plan').map(s=>({
+      id: makeId(s.company+s.name), region:s.region, flag:s.flag||regionFlag(s.region),
+      company:s.company, name:s.name, area:s.area, weight:s.weight,
+      client:s.client, received:s.received, deadline:s.deadline,
+      urgent:s.urgent, note:s.note, main:s.client||''
+    }));
+    SITE_DATA.prod    = snap.sites.filter(s=>s.category==='prod').map(s=>({
+      id: makeId(s.company+s.name), region:s.region, flag:s.flag||regionFlag(s.region),
+      company:s.company, name:s.name, area:s.area, weight:s.weight,
+      client:s.client, received:s.received, deadline:s.deadline,
+      urgent:s.urgent, note:s.note, main:s.client||''
+    }));
+    SITE_DATA.hold    = snap.sites.filter(s=>s.category==='hold').map(s=>({
+      id: makeId(s.company+s.name), region:s.region, flag:s.flag||regionFlag(s.region),
+      company:s.company, name:s.name, area:s.area, weight:s.weight,
+      client:s.client, received:s.received, deadline:s.deadline,
+      urgent:s.urgent, note:s.note, main:s.client||''
+    }));
+    SITE_DATA.shell   = snap.sites.filter(s=>s.category==='shell').map(s=>({
+      id: makeId(s.company+s.name), region:s.region, flag:s.flag||regionFlag(s.region),
+      company:s.company, name:s.name, area:s.area, weight:s.weight,
+      client:s.client, received:s.received, deadline:s.deadline,
+      urgent:s.urgent, note:s.note, main:s.client||''
+    }));
+    SITE_DATA.pending = snap.sites.filter(s=>s.category==='pending').map(s=>({
+      id: makeId(s.company+s.name), region:s.region, flag:s.flag||regionFlag(s.region),
+      company:s.company, name:s.name, area:s.area, weight:s.weight,
+      client:s.client, received:s.received, deadline:s.deadline,
+      urgent:s.urgent, note:s.note, main:s.client||''
+    }));
+  }
+
+  /* ── 팀원 업무 → MEMBERS 업데이트 (신규인원 자동 추가/변경 반영) ── */
+  if(snap.members && Object.keys(snap.members).length > 0){
+    const MEMBER_ORDER = ['황인용','염용래','승호연','오세곤','최은미','박주원','탄투이','MICHAEL'];
+    const parsedNames = Object.keys(snap.members).filter(k=>k!=='__kkm__');
+
+    // 1. 기존 인원 업무 업데이트
+    parsedNames.forEach(name=>{
+      const m = snap.members[name];
+      if(MEMBERS[name]){
+        // summary 업데이트 (localStorage 수동편집 없는 경우만)
+        const stored = getMemberEdits();
+        if(!stored[name]){
+          MEMBERS[name].summary = m.tasks.join(' | ');
+        }
+      } else {
+        // 2. 신규 인원이면 MEMBERS에 자동 추가
+        const colors=['#6366f1','#f59e0b','#10b981','#ef4444','#8b5cf6','#06b6d4','#f97316','#ec4899'];
+        const ci = Object.keys(MEMBERS).length % colors.length;
+        MEMBERS[name] = {
+          av: name.substring(0,1),
+          color: colors[ci],
+          role: '파트원',
+          status: '재직',
+          summary: m.tasks.join(' | '),
+          projects: []
+        };
+      }
+    });
+
+    // 3. 현장 목록 재연결
+    const allActive = [...SITE_DATA.plan,...SITE_DATA.prod];
+    Object.keys(MEMBERS).forEach(name=>{
+      MEMBERS[name].projects = allActive
+        .filter(s=>s.client===name||s.main===name||(s.note&&s.note.includes(name)))
+        .map(s=>s.id);
+    });
+
+    // 4. 인원 변경 알림
+    const added = parsedNames.filter(n=>!MEMBER_ORDER.includes(n));
+    if(added.length>0) showToast('👤 신규 인원 추가됨: '+added.join(', '));
+  }
+
+  /* ── 월별 설계량 차트 데이터 업데이트 ── */
+  if(snap.monthlyData){
+    window._monthlyDataFromExcel = snap.monthlyData;
+  }
+
+  /* ── 기준일 표시 업데이트 ── */
+  const refEl = document.getElementById('ref-date-pill');
+  if(refEl) refEl.textContent = '기준 '+(snap.refDate||'—');
+
+  /* ── 누적 히스토리 저장 ── */
+  snap.planCount  = SITE_DATA.plan.length;
+  snap.prodCount  = SITE_DATA.prod.length;
+  snap.holdCount  = SITE_DATA.hold.length;
+  snap.waitCount  = SITE_DATA.shell.length + SITE_DATA.pending.length;
+  snap.totalArea  = [...SITE_DATA.plan,...SITE_DATA.prod].reduce((a,s)=>a+(s.area||0),0);
+  const hist = getHistory();
+  hist.push(snap);
+  setHistory(hist);
+  updateCumBadge();
+
+  /* ── 대시보드 전체 재렌더 ── */
+  renderTab0();
+  renderTab1();
+  buildL2();
+  chartsRendered = false; // 차트 강제 재렌더
+  if(currentTab===2) renderCharts();
+
+  document.getElementById('preview-modal').classList.remove('open');
+  pendingUpdate = null;
+  showToast('✅ 대시보드 전체 업데이트 완료 — '+snap.refDate);
+}
+
+function makeId(str){
+  return str.toLowerCase().replace(/[^a-z0-9가-힣]/g,'').substring(0,20)||('id'+Math.random().toString(36).slice(2,8));
+}
+function cancelPreview(){
+  pendingUpdate=null;
+  document.getElementById('preview-modal').classList.remove('open');
+}
+
+/* ═══════════════════════════════════════════
+   SLIDE NAV
+═══════════════════════════════════════════ */
+const SLIDES=['l2','l3','member-slide','cum-slide'];
+function _slideOpen(id){
+  SLIDES.forEach(s=>{if(s!==id){const el=document.getElementById(s);if(el)el.dataset.pendingClose='';}});
+  document.getElementById(id).classList.add('open');
+  history.pushState({slide:id},'');
+}
+
+window.addEventListener('popstate',function(){
+  const order=['l3','member-slide','cum-slide','l2'];
+  for(const id of order){const el=document.getElementById(id);if(el&&el.classList.contains('open')){el.classList.remove('open');return;}}
+});
+
+document.addEventListener('keydown',function(e){
+  if(e.key==='Backspace'){
+    const t=document.activeElement.tagName;
+    if(t==='INPUT'||t==='TEXTAREA'||t==='SELECT') return;
+    e.preventDefault();
+    const order=['l3','member-slide','cum-slide','l2'];
+    for(const id of order){const el=document.getElementById(id);if(el&&el.classList.contains('open')){history.back();return;}}
+  }
+});
+
+// touch swipe
+(function(){
+  let sx=0,sy=0;
+  document.addEventListener('touchstart',e=>{sx=e.touches[0].clientX;sy=e.touches[0].clientY;},{passive:true});
+  document.addEventListener('touchend',e=>{
+    const dx=e.changedTouches[0].clientX-sx;
+    const dy=Math.abs(e.changedTouches[0].clientY-sy);
+    if(dx>60&&dy<30&&sx<40){
+      const order=['l3','member-slide','cum-slide','l2'];
+      if(order.some(id=>{const el=document.getElementById(id);return el&&el.classList.contains('open');})) history.back();
+    }
+  },{passive:true});
+})();
+
+
+/* ═══════════════════════════════════════════
+   팀원 업무 직접 편집 (localStorage 영구 저장)
+═══════════════════════════════════════════ */
+const MEMBER_EDITS_KEY = 'kkm_member_edits_v10';
+
+/* ═══════════════════════════════════════════
+   팀원 데이터 — localStorage Single Source of Truth
+   수정 즉시 메모리 + 저장소 동시 반영
+═══════════════════════════════════════════ */
+
+/* localStorage에서 전체 팀원 편집 데이터 읽기 */
+function getMemberEdits(){
+  try{ return JSON.parse(localStorage.getItem(MEMBER_EDITS_KEY)||'{}'); }
+  catch{ return {}; }
+}
+
+/* localStorage에 저장 */
+function setMemberEdits(obj){
+  localStorage.setItem(MEMBER_EDITS_KEY, JSON.stringify(obj));
+}
+
+/* 페이지 로드 및 렌더 전 항상 localStorage → MEMBERS 반영 */
+function applyStoredMemberEdits(){
+  const edits = getMemberEdits();
+  Object.entries(edits).forEach(([name, e])=>{
+    if(MEMBERS[name]){
+      MEMBERS[name].role    = e.role    || MEMBERS[name].role;
+      MEMBERS[name].summary = e.summary || MEMBERS[name].summary;
+      MEMBERS[name].status  = e.status  || MEMBERS[name].status;
+    }
+  });
+}
+
+/* 팀원 편집 모달 열기 */
+function openMemberEdit(name, evt){
+  if(evt){ evt.stopPropagation(); }
+  // 열기 전 항상 최신 저장값 반영
+  applyStoredMemberEdits();
+  const m = MEMBERS[name];
+  if(!m) return;
+
+  document.getElementById('me-name').value    = name;
+  document.getElementById('me-title').textContent = name + ' — 업무 편집';
+  document.getElementById('me-sub').textContent   = m.role + ' · ' + m.status;
+  document.getElementById('me-role').value    = m.role;
+  document.getElementById('me-summary').value = m.summary;
+
+  document.querySelectorAll('.me-status-btn').forEach(btn=>{
+    const btnStatus = btn.textContent.replace('●','').replace('◐','').trim();
+    btn.classList.toggle('active', btnStatus === m.status);
+  });
+
+  document.getElementById('member-edit-modal').classList.add('open');
+}
+
+function closeMemberEdit(){
+  document.getElementById('member-edit-modal').classList.remove('open');
+}
+
+function setMeStatus(btn, status){
+  document.querySelectorAll('.me-status-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+}
+
+/* ★ 핵심: 저장 즉시 MEMBERS 메모리 + localStorage 동시 업데이트 + 화면 즉시 반영 */
+function saveMemberEdit(){
+  const name    = document.getElementById('me-name').value;
+  const role    = document.getElementById('me-role').value.trim();
+  const summary = document.getElementById('me-summary').value.trim();
+  const activeBtn = document.querySelector('.me-status-btn.active');
+  const status  = activeBtn
+    ? activeBtn.textContent.replace(/[●◐]/g,'').trim()
+    : (MEMBERS[name]||{}).status;
+
+  if(!name || !MEMBERS[name]) return;
+
+  // 1. MEMBERS 메모리 즉시 업데이트
+  if(role)    MEMBERS[name].role    = role;
+  if(summary) MEMBERS[name].summary = summary;
+  if(status)  MEMBERS[name].status  = status;
+
+  // 2. localStorage 즉시 저장 (빈 값 포함 전체 저장)
+  const edits = getMemberEdits();
+  edits[name] = {
+    role:    MEMBERS[name].role,
+    summary: MEMBERS[name].summary,
+    status:  MEMBERS[name].status,
+    ts:      Date.now()
+  };
+  setMemberEdits(edits);
+
+  // 3. 화면 즉시 재렌더 (탭2 팀원 그리드)
+  renderMemberGrid();
+
+  // 4. 팀원 상세 슬라이드도 열려있으면 갱신
+  const memberSlide = document.getElementById('member-slide');
+  if(memberSlide && memberSlide.classList.contains('open')){
+    openMember(name);
+  }
+
+  closeMemberEdit();
+  showToast('✅ ' + name + ' 정보 저장됨');
+}
+
+
+
+/* ═══════════════════════════════════════════
+   구글시트 CSV 실시간 연동
+═══════════════════════════════════════════ */
+const GS_CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQHd_TkypqIxYnNwZtEbLBzwDd2BYN92uF5uc4xzImtrX5-7e_ntq0Z82fJIWdAZwroWolz9GYM-W7y/pub?output=csv';
+const GS_SYNC_KEY = 'kkm_gs_last_sync';
+let _autoSyncTimer = null;
+
+/* ── 메인 동기화 함수 ── */
+async function syncGoogleSheet(){
+  const btn = document.getElementById('btn-gs');
+  const statusEl = document.getElementById('sync-status');
+  btn.classList.add('syncing');
+  btn.innerHTML = '<span>⏳ 동기화 중...</span>';
+  statusEl.style.display = 'none';
+
+  const SHEET_CSV = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQHd_TkypqIxYnNwZtEbLBzwDd2BYN92uF5uc4xzImtrX5-7e_ntq0Z82fJIWdAZwroWolz9GYM-W7y/pub?output=csv';
+
+  // CORS 프록시 목록 — 순서대로 시도 (직접 fetch 먼저, 실패하면 프록시 경유)
+  const PROXIES = [
+    csv => csv,                                                                         // 직접 fetch (웹서버에서 열 때)
+    csv => `https://corsproxy.io/?${encodeURIComponent(csv)}`,                         // 프록시 1
+    csv => `https://api.allorigins.win/raw?url=${encodeURIComponent(csv)}`,            // 프록시 2
+    csv => `https://thingproxy.freeboard.io/fetch/${csv}`,                             // 프록시 3
+    csv => `https://api.codetabs.com/v1/proxy?quest=${encodeURIComponent(csv)}`,       // 프록시 4
+  ];
+
+  // gid 후보 (현장현황 탭 찾기)
+  const GIDS = [0, 1, 2, 3, 4, 5, 6, 7];
+
+  let snap = null;
+  let lastErr = '알 수 없는 오류';
+
+  // 각 프록시 × 각 gid 조합으로 시도
+  outer:
+  for(const makeUrl of PROXIES){
+    for(const gid of GIDS){
+      const csvUrl = `${SHEET_CSV}&gid=${gid}&t=${Date.now()}`;
+      const proxyUrl = makeUrl(csvUrl);
+      try {
+        const res = await fetch(proxyUrl, {
+          method: 'GET',
+          cache: 'no-store',
+        });
+        if(!res.ok) continue;
+        const csv = await res.text();
+        if(!csv || csv.length < 100) continue;
+
+        // 현장현황 시트 확인
+        const isDesignSheet =
+          csv.includes('플랜 진행중') ||
+          csv.includes('제작도 진행중') ||
+          csv.includes('설계보류') ||
+          csv.includes('설계 보류');
+        if(!isDesignSheet) continue;
+
+        const parsed = parseGoogleSheetCSV(csv);
+        if(parsed.sites.length > 0){
+          snap = parsed;
+          console.log(`✅ 프록시 성공 gid=${gid}`, proxyUrl.slice(0,60));
+          break outer;
+        }
+      } catch(e){
+        lastErr = e.message;
+        console.warn(`프록시 실패 gid=${gid}:`, e.message);
+      }
+    }
+  }
+
+  try {
+    if(!snap) throw new Error(lastErr);
+
+    applySnapToDashboard(snap);
+
+    const now = new Date();
+    const ts = `${now.getMonth()+1}/${now.getDate()} ${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')}`;
+    localStorage.setItem(GS_SYNC_KEY, JSON.stringify({ts: Date.now(), label: ts}));
+
+    statusEl.className = 'sync-indicator';
+    statusEl.innerHTML = `<div class="sync-dot"></div> ${ts} 동기화됨`;
+    statusEl.style.display = 'inline-flex';
+    showToast(`✅ 동기화 완료 — ${snap.sites.length}건`);
+
+  } catch(err) {
+    console.error('동기화 최종 실패:', err);
+    statusEl.className = 'sync-indicator sync-error';
+    statusEl.innerHTML = '⚠ 동기화 실패';
+    statusEl.style.display = 'inline-flex';
+    showToast('⚠ 동기화 실패: 인터넷 연결을 확인해주세요');
+  } finally {
+    btn.classList.remove('syncing');
+    btn.innerHTML = '<span>🔄 시트 동기화</span>';
+  }
+}
+
+/* ── CSV 파싱 (구글시트 → 현장 데이터) ── */
+function parseGoogleSheetCSV(csvText){
+  const snap = {
+    sites:[], refDate:'',
+    planCount:0, prodCount:0, holdCount:0, waitCount:0,
+    totalArea:0, members:{}, monthlyData:null
+  };
+
+  // CSV 행 파싱 (쉼표+따옴표 처리)
+  function parseCSVLine(line){
+    const result = [];
+    let cur = '', inQ = false;
+    for(let i=0; i<line.length; i++){
+      const c = line[i];
+      if(c==='"'){ inQ=!inQ; continue; }
+      if(c===',' && !inQ){ result.push(cur.trim()); cur=''; continue; }
+      cur += c;
+    }
+    result.push(cur.trim());
+    return result;
+  }
+
+  const lines = csvText.split('\n').filter(l=>l.trim());
+  const rows = lines.map(parseCSVLine);
+
+  // 기준일 추출 (상위 5행에서 날짜 패턴 찾기)
+  for(let i=0; i<Math.min(5,rows.length); i++){
+    for(const cell of rows[i]){
+      if(cell && cell.match(/\d{4}\.\s*\d+\.\s*\d+/)){
+        snap.refDate = cell.trim(); break;
+      }
+    }
+    if(snap.refDate) break;
+  }
+
+  let currentType = '';
+  let currentSubType = '';
+
+  rows.forEach(row => {
+    if(!row || row.length < 2) return;
+    const col0 = (row[0]||'').trim();
+    const col1 = (row[1]||'').trim();
+
+    // 섹션 구분
+    if(col0.includes('플랜 진행중'))                        { currentType='plan'; return; }
+    if(col0.includes('제작도 진행중'))                       { currentType='prod'; return; }
+    if(col0.includes('설계보류')||col0.includes('설계 보류')){ currentType='hold'; return; }
+    if(col0.includes('설계 대기'))                          { currentType='wait'; currentSubType='확정대기'; return; }
+    if(col1.includes('SHELL 작업중'))                       { currentSubType='shell'; return; }
+    if(col1.includes('도면 미 접수')||col1.includes('도면미접수')||
+       col1.includes('층변화 대기')||col1.includes('견적')||col1.includes('예정')){ currentSubType='pending'; return; }
+
+    // 소계/헤더 행 스킵
+    if(col1==='소  계'||col1==='확정- 설계 대기'||col0==='유형'||col1==='지역') return;
+    if(col0.includes('설계 진행중 합계')||col0.includes('합  계')) return;
+    if(col0==='취소') return;
+
+    // 현장 데이터: col1=지역, col2=업체, col3=현장명
+    const region   = col1;
+    const company  = (row[2]||'').trim();
+    const siteName = (row[3]||'').trim();
+    const area     = parseFloat(row[4])||null;
+    const weight   = parseFloat(row[5])||null;
+    const received = (row[8]||'').trim().substring(0,10);
+    const deadline = (row[12]||'').trim()||'—';
+    const client   = (row[13]||'').trim();
+    const note     = (row[14]||'').trim();
+
+    if(!region || region==='소  계' || !company) return;
+    if(['SHELL 작업중','도면 미 접수','층변화 대기','견적','예정'].includes(region)) return;
+
+    const urgent = note.includes('긴급') || deadline==='긴급';
+    const flag   = regionFlag(region);
+
+    const category = currentType==='plan' ? 'plan' :
+                     currentType==='prod' ? 'prod' :
+                     currentType==='hold' ? 'hold' :
+                     currentSubType==='shell' ? 'shell' : 'pending';
+
+    snap.sites.push({
+      id: makeId(company+siteName),
+      region, flag, company, name:siteName,
+      area, weight, client, received,
+      deadline, note, urgent,
+      category, typeKey:currentType,
+      main: client||''
+    });
+
+    if(currentType==='plan'){ snap.planCount++; if(area) snap.totalArea+=area; }
+    else if(currentType==='prod'){ snap.prodCount++; if(area) snap.totalArea+=area; }
+    else if(currentType==='hold'){ snap.holdCount++; }
+    else if(currentType==='wait'){ snap.waitCount++; }
+  });
+
+  return snap;
+}
+
+/* ── 파싱된 snap을 대시보드에 적용 (applyUpdate와 공통 로직) ── */
+function applySnapToDashboard(snap){
+  if(snap.sites.length > 0){
+    SITE_DATA.plan    = snap.sites.filter(s=>s.category==='plan');
+    SITE_DATA.prod    = snap.sites.filter(s=>s.category==='prod');
+    SITE_DATA.hold    = snap.sites.filter(s=>s.category==='hold');
+    SITE_DATA.shell   = snap.sites.filter(s=>s.category==='shell');
+    SITE_DATA.pending = snap.sites.filter(s=>s.category==='pending');
+  }
+
+  // 기준일 업데이트
+  const refEl = document.getElementById('ref-date-pill');
+  if(refEl && snap.refDate) refEl.textContent = '기준 ' + snap.refDate;
+
+  // 누적 히스토리 저장
+  snap.filename = '구글시트 동기화';
+  snap.ts = Date.now();
+  const hist = getHistory();
+  hist.push(snap);
+  setHistory(hist);
+  updateCumBadge();
+
+  // 전체 재렌더
+  renderTab0();
+  renderTab1();
+  buildL2();
+  chartsRendered = false;
+  if(currentTab===2) renderCharts();
+}
+
+/* ── 자동 동기화 (선택적 — 5분마다) ── */
+function startAutoSync(intervalMin=5){
+  if(_autoSyncTimer) clearInterval(_autoSyncTimer);
+  _autoSyncTimer = setInterval(()=>syncGoogleSheet(), intervalMin * 60 * 1000);
+}
+
+/* ── 페이지 로드 시 마지막 동기화 시각 복원 ── */
+function restoreLastSyncStatus(){
+  const stored = localStorage.getItem(GS_SYNC_KEY);
+  if(!stored) return;
+  try{
+    const {label} = JSON.parse(stored);
+    const statusEl = document.getElementById('sync-status');
+    if(statusEl && label){
+      statusEl.className = 'sync-indicator';
+      statusEl.innerHTML = `<div class="sync-dot"></div> ${label} 동기화됨`;
+      statusEl.style.display = 'inline-flex';
+    }
+  } catch(e){}
+}
+
+/* ═══════════════════════════════════════════
+   TOAST
+═══════════════════════════════════════════ */
+function showToast(msg){
+  const t=document.getElementById('_toast');
+  t.textContent=msg;t.style.opacity='1';
+  clearTimeout(t._timer);
+  t._timer=setTimeout(()=>{t.style.opacity='0';},2200);
+}
+
+/* ═══════════════════════════════════════════
+   INIT
+═══════════════════════════════════════════ */
+window.addEventListener('load',function(){
+  applyStoredMemberEdits();
+  restoreLastSyncStatus();
+  renderTab0();
+  renderTab1();
+  buildL2();
+  // 탭 클릭 시 렌더
+  // switchTab()이 탭 전환 + applyStoredMemberEdits + renderTab1() 통합 처리
+});
+
+</script>
+</body>
+</html>
